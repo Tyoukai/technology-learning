@@ -4,6 +4,7 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
@@ -13,7 +14,8 @@ public class HashMapTest {
 
 
     public static void main(String[] args) {
-        computeIfAbsentTest();
+//        computeIfAbsentTest();
+        consumerTest();
     }
 
     public static void computeIfAbsentTest() {
@@ -33,6 +35,16 @@ public class HashMapTest {
 
         System.out.println(map);
 
+    }
+
+    public static void consumerTest() {
+        Consumer<Integer> consumer1 = x -> System.out.println("当前值：" + x);
+
+        Consumer<Integer> consumer2 = x -> {System.out.println("相加值：" + (x + x));};
+
+        Consumer<Integer> consumer3 = x -> System.out.println("相乘：" + (x * x));
+
+        consumer1.andThen(consumer2).andThen(consumer3).accept(1);
     }
 
 }
