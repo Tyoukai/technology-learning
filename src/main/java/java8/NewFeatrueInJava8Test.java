@@ -1,6 +1,9 @@
 package java8;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
@@ -9,11 +12,13 @@ import java.util.Optional;
 public class NewFeatrueInJava8Test {
 
     public static void main(String[] args) {
-        try {
-            testOptional();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            testOptional();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        testFunctional();
     }
 
     public static void testOptional() throws Exception {
@@ -52,7 +57,29 @@ public class NewFeatrueInJava8Test {
         Optional<String> strOptional1 = Optional.ofNullable(result)
                             .flatMap(tmp -> Optional.of("123"));
         strOptional1.ifPresent(tmp -> System.out.println("flatMap:" + tmp));
+    }
 
+    public static void testFunctional() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
 
+        addAndPrint(list, list1 -> {
+            int sum = 0;
+            for (int i = 0; i < list1.size(); i++) {
+                sum += list1.get(i);
+            }
+
+            System.out.println(sum);
+        });
+    }
+
+    public static void addAndPrint(List<Integer> list, Consumer<List<Integer>> consumer) {
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, list.get(i) + 1);
+        }
+
+        consumer.accept(list);
     }
 }
