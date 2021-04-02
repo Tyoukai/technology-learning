@@ -1,7 +1,5 @@
 package java8;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
