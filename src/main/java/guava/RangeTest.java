@@ -6,7 +6,7 @@ import com.google.common.collect.Range;
  * @author zhangkwei <zhangkewei@kuaishou.com>
  * Created on 2021-03-23
  */
-public class RangeSetTest {
+public class RangeTest {
     public static void main(String[] args) {
         System.out.println(Range.closed(1, 10));
         System.out.println(Range.closedOpen(1, 10));

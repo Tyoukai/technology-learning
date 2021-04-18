@@ -13,7 +13,7 @@ public class MainTest {
         OuterApi api = new OuterApi();
 
         while (true) {
-            Map<String, String> result = AbTestUtils.doABTest(api::api1, api::api2);
+            Map<String, String> result = AbTestUtils.doABTest(api::api1, api::api2, null, 12, null, null);
         }
 
     }
