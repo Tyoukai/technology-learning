@@ -10,13 +10,13 @@ import com.google.common.collect.Range;
  */
 public class GrayConfig {
     private int totalPercent;
-    private Range<Integer> range;
+    private Range<Long> range;
 
     private static final String SEMICOLON = ";";
     private static final String HORIZONTAL_BAR = "-";
 
 
-    public GrayConfig(int totalPercent, int start, int end) {
+    public GrayConfig(int totalPercent, long start, long end) {
         this.totalPercent = totalPercent;
         range = Range.closed(start, end);
     }
@@ -25,7 +25,7 @@ public class GrayConfig {
         String[] configStr = grayConfigStr.split(SEMICOLON);
         String[] nums = configStr[1].split(HORIZONTAL_BAR);
         totalPercent = Integer.parseInt(configStr[0]);
-        range = Range.closed(Integer.parseInt(nums[0]), Integer.parseInt(nums[1]));
+        range = Range.closed(Long.parseLong(nums[0]), Long.parseLong(nums[1]));
     }
 
     /**
@@ -34,7 +34,7 @@ public class GrayConfig {
      * @param grayKey 灰度key
      * @return
      */
-    public boolean hitGray(int grayKey) {
+    public boolean hitGray(long grayKey) {
         grayKey = Math.abs(grayKey) % totalPercent;
         return range.contains(grayKey);
     }
@@ -47,11 +47,11 @@ public class GrayConfig {
         this.totalPercent = totalPercent;
     }
 
-    public Range<Integer> getRange() {
+    public Range<Long> getRange() {
         return range;
     }
 
-    public void setRange(Range<Integer> range) {
+    public void setRange(Range<Long> range) {
         this.range = range;
     }
 }

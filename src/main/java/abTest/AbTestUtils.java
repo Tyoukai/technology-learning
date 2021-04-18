@@ -28,14 +28,33 @@ public class AbTestUtils {
      * @param <R>
      * @return
      */
-    public static<T, R> T doABTest(Supplier<T> aSupplier, Supplier<R> bSupplier, Function<T, R> convert,
+    public static<T, R> T doABTest(Supplier<T> aSupplier, Supplier<R> bSupplier, Function<R, T> convert,
             long grayKey, Comparator<T> comparable, BiConsumer<T, T> diffCallBack) {
+        GrayConfig grayConfig = new GrayConfig(getConfig("grayConfig"));
+        T result = null;
+        R tmpResult = null;
+        boolean hitGrayKey = false;
+        if (grayConfig.hitGray(grayKey)) {
+            hitGrayKey = true;
+            tmpResult = bSupplier.get();
+        } else {
+            result = aSupplier.get();
+        }
 
+        // 命中灰度key，将新接口结果转换回老接口
+        if (hitGrayKey) {
+            result = convert.apply(tmpResult);
+        }
 
-        return null;
+        // 是否开启流量回放
+        if (Boolean.parseBoolean(getConfig("trafficPlaybackSwitch"))) {
+            flowPlayBack((hitGrayKey));
+        }
+
+        return result;
     }
 
-    private String getConfig(String key) {
+    private static String getConfig(String key) {
         String value;
         try {
             Properties properties = new Properties();
@@ -47,5 +66,9 @@ public class AbTestUtils {
             // ignore
         }
         return value;
+    }
+
+    private static void flowPlayBack(boolean hitGrayKey) {
+
     }
 }
