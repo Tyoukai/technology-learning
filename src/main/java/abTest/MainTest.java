@@ -1,6 +1,10 @@
 package abTest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 总的模拟入口
@@ -11,9 +15,21 @@ import java.util.Map;
 public class MainTest {
     public static void main(String[] args) {
         OuterApi api = new OuterApi();
+        List<String> list = new ArrayList<>();
 
+        AbTestHelper<Person, PersonNew> helper = new AbTestHelper<>((person, person1) -> {
+            if (person == null || person1 == null) {
+                return -1;
+            }
+            if (StringUtils.equals(person.getAge(), person1.getAge()) && StringUtils.equals(person.getIdCard(), person1.getIdCard()) &&
+            StringUtils.equals(person.getName(), person1.getName())) {
+                return 0;
+            }
+            return -1;
+        }, null, null);
+        String idCard = "123";
         while (true) {
-            Map<String, String> result = AbTestUtils.doABTest(api::api1, api::api2, null, 12, null, null);
+            Person result = helper.doABTest(() -> api.api1(idCard), () -> api.api2(idCard), Long.parseLong(idCard));
         }
 
     }

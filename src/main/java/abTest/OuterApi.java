@@ -12,19 +12,29 @@ import java.util.Random;
  */
 public class OuterApi {
     private Random random = new Random();
-    public Map<String, String> api1() {
-        Map<String, String> map = new HashMap<>();
-        map.put("name", "abtest");
-        map.put("age", "13");
-        map.put("idCard", String.valueOf(random.nextInt(1000)));
-        return map;
+
+    public Person api1(String idCard) {
+        Person person = new Person();
+        person.setName("小张");
+        if (random.nextDouble() < 0.5) {
+            person.setAge("13");
+        } else {
+            person.setAge("15");
+        }
+        person.setIdCard(idCard);
+        return person;
     }
 
-    public Map<String, String> api2() {
-        Map<String, String> map = new HashMap<>();
-        map.put("name", "abtest");
-        map.put("age", "13");
-        map.put("sex", "1");
-        return map;
+    public PersonNew api2(String idCard) {
+        PersonNew personNew = new PersonNew();
+        personNew.setName("小张");
+        if (random.nextDouble() < 0.5) {
+            personNew.setAge("13");
+        } else {
+            personNew.setAge("15");
+        }
+        personNew.setSex("1");
+        personNew.setIdCard(idCard);
+        return personNew;
     }
 }
