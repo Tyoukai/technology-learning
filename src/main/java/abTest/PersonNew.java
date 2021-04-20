@@ -41,4 +41,14 @@ public class PersonNew {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
+    @Override
+    public String toString() {
+        return "PersonNew{" +
+                "name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", sex='" + sex + '\'' +
+                '}';
+    }
 }

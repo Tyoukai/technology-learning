@@ -32,4 +32,13 @@ public class Person {
     public void setIdCard(String idCard) {
         this.idCard = idCard;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", idCard='" + idCard + '\'' +
+                '}';
+    }
 }

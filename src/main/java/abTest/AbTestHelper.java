@@ -35,7 +35,7 @@ public class AbTestHelper<T, R> {
      * @param grayKey       灰度的key
      * @return
      */
-    public T doABTest(Supplier<T> aSupplier, Supplier<R> bSupplier, long grayKey) {
+    public T doABTest(Supplier<T> aSupplier, Supplier<R> bSupplier, int grayKey) {
         GrayConfig grayConfig = new GrayConfig(getConfig("grayConfig"));
         T result = null;
         R tmpResult = null;
@@ -43,8 +43,10 @@ public class AbTestHelper<T, R> {
         if (grayConfig.hitGray(grayKey)) {
             hitGrayKey = true;
             tmpResult = bSupplier.get();
+            System.out.println("命中灰度");
         } else {
             result = aSupplier.get();
+            System.out.println("未命中灰度");
         }
 
         // 命中灰度key，将新接口结果转换回老接口
@@ -74,6 +76,14 @@ public class AbTestHelper<T, R> {
         return value;
     }
 
+    /**
+     * 一般流量回放会放到一个线程池中异步执行，避免影响主流程响应
+     *
+     * @param hitGrayKey
+     * @param aSupplier
+     * @param bSupplier
+     * @param result
+     */
     private void flowPlayBack(boolean hitGrayKey, Supplier<T> aSupplier, Supplier<R> bSupplier, T result) {
         if (hitGrayKey) {
             T aResult = aSupplier.get();
