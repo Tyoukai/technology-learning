@@ -11,11 +11,11 @@ public class Person extends AbstractList {
     public Integer age;
     public String name;
 
-    Person() {
+    public Person() {
 
     }
 
-    Person(int age, String name) {
+    public Person(int age, String name) {
         this.age = age;
         this.name = name;
     }
