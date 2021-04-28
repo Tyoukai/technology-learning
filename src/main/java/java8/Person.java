@@ -45,4 +45,12 @@ public class Person extends AbstractList {
     public int size() {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "age=" + age +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
