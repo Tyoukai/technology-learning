@@ -2,25 +2,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java8.Person;
+
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
  * Created on 2021-05-15
  */
 public class Test {
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
+        List<Person> list = new ArrayList<>();
+        list.add(new Person(1, "1"));
+        list.add(new Person(2, "2"));
 
-        List<String> list1 = new ArrayList<>(list);
-//        list1.stream().filter(str -> {
-//            return str.equals("1");
-//        }).collect(Collectors.toList());
-        list1.remove("2");
-        String a = String.valueOf(123L);
-        System.out.println(a);
+        List<Person> list1 = new ArrayList<>(list);
 
-        System.out.println(list);
-        System.out.println(list1);
+        System.out.println(list.get(0) == list1.get(0));
     }
 }
