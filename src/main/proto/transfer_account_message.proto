@@ -1,0 +1,17 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "grpc.generated.parameter";
+
+package transfer.account;
+
+message TransferAccountRequest {
+  int64 amount = 1;  // 金额
+  string from_user_id = 2; // 转账人id
+  string to_user_id = 3; // 被转账人id
+  int64 timestamp = 4; // 时间
+}
+
+message TransferAccountResponse {
+  int32 code = 1; // 返回码
+  string msg = 2; // 返回信息
+}

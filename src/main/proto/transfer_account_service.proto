@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.generated.service";
+
+package transfer.account;
+
+import "transfer_account_message.proto";
+
+service TransferAccountService {
+  rpc transferAccount(TransferAccountRequest) returns (TransferAccountResponse);
+}

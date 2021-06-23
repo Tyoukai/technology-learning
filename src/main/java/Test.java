@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import java8.Person;
@@ -17,5 +19,11 @@ public class Test {
         List<Person> list1 = new ArrayList<>(list);
 
         System.out.println(list.get(0) == list1.get(0));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("string", "string");
+        map.put("int", 1);
+
+        System.out.println(map.get("int") instanceof String);
     }
 }
