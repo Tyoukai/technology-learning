@@ -17,7 +17,6 @@ public class GrpcClient {
         ManagedChannel channel = null;
         try {
             channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
-
             TransferAccountServiceGrpc.TransferAccountServiceBlockingStub stub = TransferAccountServiceGrpc.newBlockingStub(channel);
 
             TransferAccountResponse response = stub.transferAccount(TransferAccountRequest
