@@ -13,10 +13,14 @@ public class CatDemo {
     private static Random random = new Random();
     public static void main(String[] args) {
         while (true) {
-            String orderId = random.nextLong() + "";
+            String orderId = Math.abs(random.nextLong()) + "";
             Transaction t1 = null;
             try {
                 t1 = Cat.newTransaction("order.monitoring", orderId);
+
+                if (random.nextInt(10) < 3) {
+                    throw new Exception("order Exception");
+                }
 
                 Transaction t2 = Cat.newTransaction("order.stock", orderId);
                 // 扣减库存
@@ -40,7 +44,7 @@ public class CatDemo {
                 // 下单成功，记录打点
                 t1.setStatus(Transaction.SUCCESS);
             } catch (Exception e) {
-                t1.setStatus("fail");
+                t1.setStatus("fail order");
                 // 上传错误日志
                 Cat.logError(e);
             } finally {
@@ -48,7 +52,8 @@ public class CatDemo {
                 t1.complete();
             }
 
-            // 记录下单的总次数，及预测趋势
+            // 记录下单的总次数
+            // MerchantPerfUtils.adMerchantPerf("order.count.record");
             Cat.logMetricForCount("order.count.record");
 
         }
