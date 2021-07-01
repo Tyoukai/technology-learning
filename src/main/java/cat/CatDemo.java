@@ -18,10 +18,24 @@ public class CatDemo {
             try {
                 t1 = Cat.newTransaction("order.monitoring", orderId);
 
+                Transaction t2 = Cat.newTransaction("order.stock", orderId);
                 // 扣减库存
+                Thread.sleep(random.nextInt(20));
+                t2.complete();
+
+                Transaction t3 = Cat.newTransaction("order.coupon", orderId);
                 // 扣减优惠券
+                Thread.sleep(random.nextInt(20));
+                t3.complete();
+
+                Transaction t4 = Cat.newTransaction("order.databse", orderId);
                 // 订单落库
-                Thread.sleep(random.nextInt(3000));
+                Thread.sleep(random.nextInt(20));
+                t4.complete();
+
+
+
+                Thread.sleep(random.nextInt(300));
 
                 // 下单成功，记录打点
                 t1.setStatus(Transaction.SUCCESS);

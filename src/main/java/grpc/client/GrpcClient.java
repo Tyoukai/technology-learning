@@ -1,5 +1,7 @@
 package grpc.client;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import grpc.generated.parameter.TransferAccountRequest;
@@ -16,7 +18,20 @@ public class GrpcClient {
     public static void main(String[] args) {
         ManagedChannel channel = null;
         try {
-            channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+//            channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+            channel = ManagedChannelBuilder
+                        .forTarget("127.0.0.1:2181")
+                        .nameResolverFactory(new ZkNameResolverProvider())
+//                        .enableRetry()
+//                        .maxRetryAttempts(3)
+//                        .keepAliveTime(5, TimeUnit.SECONDS)
+//                        .keepAliveWithoutCalls(true)
+//                        .keepAliveTimeout(10, TimeUnit.MINUTES)
+//                        .idleTimeout(24, TimeUnit.HOURS)
+//                        .defaultLoadBalancingPolicy("default")
+                        .usePlaintext()
+                        .build();
+
             TransferAccountServiceGrpc.TransferAccountServiceBlockingStub stub = TransferAccountServiceGrpc.newBlockingStub(channel);
 
             TransferAccountResponse response = stub.transferAccount(TransferAccountRequest
