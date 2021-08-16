@@ -2,7 +2,7 @@ package spring;
 
 import org.springframework.stereotype.Service;
 
-@Service
+@Service(value = "taobaoItemObtainSupport")
 public class TaobaoItemObtainSupport extends ItemObtainSupport {
 
     @Override

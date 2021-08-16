@@ -2,7 +2,7 @@ package spring;
 
 import org.springframework.stereotype.Service;
 
-@Service
+@Service(value = "jDItemObtainSupport")
 public class JDItemObtainSupport extends ItemObtainSupport {
 
     @Override

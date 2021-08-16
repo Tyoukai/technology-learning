@@ -18,7 +18,7 @@ public class FactoryApplicationListener implements ApplicationListener<ContextRe
 
         for (Map.Entry<String, ItemObtainSupport> entry : typeBeanMap.entrySet()) {
             if (!itemFactoryMap.containsKey(entry.getKey())) {
-                System.out.println("key:" + entry.getValue() + ", value:" + entry.getValue());
+                System.out.println("key:" + entry.getKey() + ", value:" + entry.getValue());
                 itemFactoryMap.put(entry.getKey(), entry.getValue());
             }
         }
