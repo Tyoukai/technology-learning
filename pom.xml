@@ -6,7 +6,10 @@
     <groupId>com.grpc.example</groupId>
     <artifactId>grpcjava</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>springcloud-learning</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>grpc-java-demo</name>
     <url>http://maven.apache.org</url>
@@ -20,6 +23,25 @@
         <protoc.version>3.5.1-1</protoc.version>
         <netty.tcnative.version>4.1.22.Final</netty.tcnative.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.0.5.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -75,7 +97,7 @@
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.3.6</version>
+            <version>3.5.3-beta</version>
         </dependency>
 
         <!--<dependency>-->
@@ -87,7 +109,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.2.9.RELEASE</version>
+            <version>5.0.2.RELEASE</version>
         </dependency>
 
         <dependency>
