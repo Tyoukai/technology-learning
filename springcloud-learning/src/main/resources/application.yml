@@ -12,3 +12,12 @@ spring:
         uri: http://www.ityouknow.com
         predicates:
           - Path=/spring-cloud
+      - id: rate_filter
+        uri: https://www.baidu.com/
+        predicates:
+          - Path=/test/rate-limit
+        filters:
+          - name: RateLimit
+            args:
+              appKey: sss
+              qps: 10
