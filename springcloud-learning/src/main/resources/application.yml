@@ -21,3 +21,10 @@ spring:
             args:
               appKey: sss
               qps: 10
+
+# 动态路由配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

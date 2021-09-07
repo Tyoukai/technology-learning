@@ -24,6 +24,7 @@
         <netty.tcnative.version>4.1.22.Final</netty.tcnative.version>
     </properties>
 
+    <!-- spring cloud相关-->
     <dependencyManagement>
         <dependencies>
             <dependency>
