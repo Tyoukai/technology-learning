@@ -34,6 +34,8 @@ public class CuratorDemo {
 //        data = client.getData().forPath("/curator");
 //        System.out.println(new String(data));
 
+        System.out.println(client.getChildren().forPath(path));
+
 
         PathChildrenCache cache = new PathChildrenCache(client, path, true);
 

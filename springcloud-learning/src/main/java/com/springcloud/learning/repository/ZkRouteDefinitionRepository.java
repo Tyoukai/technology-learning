@@ -1,9 +1,11 @@
 package com.springcloud.learning.repository;
 
 import com.springcloud.learning.utils.ObjectMapperUtils;
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionRepository;
@@ -16,63 +18,66 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 
 /**
  * 动态路由配置，存储介质zookeeper
  */
 @Component
-public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, Watcher, ApplicationEventPublisherAware {
+public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, ApplicationEventPublisherAware {
 
-    private ZooKeeper zookeeper;
-    private CountDownLatch countDownLatch = new CountDownLatch(1);
-    private String host = "42.192.49.234:2181";
-    private static final int SESSION_TIME_OUT = 2000;
-    private String path = "/gateway";
     private ApplicationEventPublisher applicationEventPublisher;
+    private String path = "/gateway";
+    private CuratorFramework curatorClient;
+    private String zookeeperAddress = "42.192.49.234:2181";
+    private String sep = "/";
 
     @PostConstruct
     public void init() {
-        try {
-            zookeeper = new ZooKeeper(host, SESSION_TIME_OUT, this);
-            countDownLatch.await();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("zookeeper connection success");
-    }
+        curatorClient = CuratorFrameworkFactory.builder()
+                .connectString(zookeeperAddress)
+                .connectionTimeoutMs(2000)
+                .sessionTimeoutMs(10000)
+                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
+                .build();
 
-    @Override
-    public void process(WatchedEvent watchedEvent) {
-        Event.KeeperState state = watchedEvent.getState();
-        Event.EventType type = watchedEvent.getType();
-        String path = watchedEvent.getPath();
-        // 连接创建
-        if (Event.KeeperState.SyncConnected == state) {
-            System.out.println("11111111");
-            countDownLatch.countDown();
-            return;
-        }
+        curatorClient.start();
 
-        try {
-            // 新增或修改路由
-            if (path.contains(this.path) && (type == Event.EventType.NodeCreated || type == Event.EventType.NodeDataChanged )) {
-                System.out.println(new String(zookeeper.getData(path, false, null)));
-                applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
+        PathChildrenCache cache = new PathChildrenCache(curatorClient, path, true);
+        cache.getListenable().addListener((curatorFramework, event) -> {
+            ChildData data = event.getData();
+            String routeStr = new String(data.getData());
+            switch (event.getType()) {
+                case CHILD_ADDED:
+                    System.out.println("新路由创建," + routeStr);
+                    break;
+                case CHILD_UPDATED:
+                    System.out.println("路由被修改, " + routeStr);
+                    break;
+                case CHILD_REMOVED:
+                    System.out.println("路由被删除," + routeStr);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
+        });
+
     }
 
     @Override
     public Flux<RouteDefinition> getRouteDefinitions() {
         List<RouteDefinition> routeDefinitions = new ArrayList<>();
         try {
-            byte[] data = zookeeper.getData(path, false, null);
-            String allRoute = new String(data);
-            routeDefinitions = ObjectMapperUtils.fromJson(allRoute, RouteDefinition.class, List.class);
+            List<String> childIds = curatorClient.getChildren().forPath(path);
+            childIds.forEach(childId -> {
+                String routeStr;
+                try {
+                    routeStr = new String(curatorClient.getData().forPath(path + sep + childId));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
+                RouteDefinition routeDefinition = ObjectMapperUtils.fromJson(routeStr, RouteDefinition.class);
+                routeDefinitions.add(routeDefinition);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,20 +86,12 @@ public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, W
 
     @Override
     public Mono<Void> save(Mono<RouteDefinition> route) {
-        return route.flatMap(routeDefinition -> {
-            try {
-                String data = ObjectMapperUtils.toJson(routeDefinition);
-                zookeeper.setData(path, data.getBytes(), -1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return Mono.empty();
-        });
+        return route.flatMap(routeDefinition -> Mono.empty());
     }
 
     @Override
     public Mono<Void> delete(Mono<String> routeId) {
-        return null;
+        return Mono.empty();
     }
 
     @Override

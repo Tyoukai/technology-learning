@@ -5,10 +5,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.cloud.gateway.route.RouteDefinition;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static com.fasterxml.jackson.databind.type.TypeFactory.defaultInstance;
 
@@ -68,5 +70,11 @@ public class ObjectMapperUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void main(String[] args) {
+        String routeStr = "[{\"route_id\":\"zookeeper_test\",\"route_definition\":{\"id\":\"zookeeper_test\",\"predicates\":[{\"name\":\"Path\",\"args\":{\"_genkey_0\":\"/zookeeper_test_path\"}}],\"filters\":[],\"uri\":\"https://www.bilibili.com/\",\"order\":0},\"order\":0}]";
+        List<RouteDefinition> routeDefinition = ObjectMapperUtils.fromJson(routeStr, RouteDefinition.class, List.class);
+        System.out.println(routeDefinition);
     }
 }
