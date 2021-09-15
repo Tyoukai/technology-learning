@@ -73,8 +73,8 @@ public class ObjectMapperUtils {
     }
 
     public static void main(String[] args) {
-        String routeStr = "[{\"route_id\":\"zookeeper_test\",\"route_definition\":{\"id\":\"zookeeper_test\",\"predicates\":[{\"name\":\"Path\",\"args\":{\"_genkey_0\":\"/zookeeper_test_path\"}}],\"filters\":[],\"uri\":\"https://www.bilibili.com/\",\"order\":0},\"order\":0}]";
-        List<RouteDefinition> routeDefinition = ObjectMapperUtils.fromJson(routeStr, RouteDefinition.class, List.class);
+        String routeStr = "{\"id\":\"zookeeper_test\",\"predicates\":[{\"name\":\"Path\",\"args\":{\"_genkey_0\":\"/zookeeper_test\"}}],\"filters\":[],\"uri\":\"https://www.bilibili.com/\",\"order\":0}";
+        RouteDefinition routeDefinition = ObjectMapperUtils.fromJson(routeStr, RouteDefinition.class);
         System.out.println(routeDefinition);
     }
 }

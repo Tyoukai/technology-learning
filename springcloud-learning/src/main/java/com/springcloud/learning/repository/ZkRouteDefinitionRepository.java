@@ -33,7 +33,7 @@ public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, A
     private String sep = "/";
 
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         curatorClient = CuratorFrameworkFactory.builder()
                 .connectString(zookeeperAddress)
                 .connectionTimeoutMs(2000)
@@ -46,6 +46,9 @@ public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, A
         PathChildrenCache cache = new PathChildrenCache(curatorClient, path, true);
         cache.getListenable().addListener((curatorFramework, event) -> {
             ChildData data = event.getData();
+            if (data.getData() == null) {
+                return;
+            }
             String routeStr = new String(data.getData());
             switch (event.getType()) {
                 case CHILD_ADDED:
@@ -59,6 +62,8 @@ public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, A
             }
             applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
         });
+
+        cache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
 
     }
 
