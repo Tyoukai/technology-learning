@@ -39,21 +39,18 @@ public class CuratorDemo {
 
         PathChildrenCache cache = new PathChildrenCache(client, path, true);
 
-        PathChildrenCacheListener listener = new PathChildrenCacheListener() {
-            @Override
-            public void childEvent(CuratorFramework curatorFramework, PathChildrenCacheEvent event) throws Exception {
-                ChildData data = event.getData();
-                String strData = new String(data.getData());
-                switch (event.getType()) {
-                    case CHILD_ADDED:
-                        System.out.println("子节点创建,路径：" + data.getPath() + ", 节点数据：" + strData);
-                        break;
-                    case CHILD_UPDATED:
-                        System.out.println("子节点数据更新，路径：" + data.getPath() + ",节点数据：" + strData);
-                        break;
-                    case CHILD_REMOVED:
-                        System.out.println("子节点被移除，路径：" + data.getPath() + ",节点数据：" + strData);
-                }
+        PathChildrenCacheListener listener = (curatorFramework, event) -> {
+            ChildData data = event.getData();
+            String strData = new String(data.getData());
+            switch (event.getType()) {
+                case CHILD_ADDED:
+                    System.out.println("子节点创建,路径：" + data.getPath() + ", 节点数据：" + strData);
+                    break;
+                case CHILD_UPDATED:
+                    System.out.println("子节点数据更新，路径：" + data.getPath() + ",节点数据：" + strData);
+                    break;
+                case CHILD_REMOVED:
+                    System.out.println("子节点被移除，路径：" + data.getPath() + ",节点数据：" + strData);
             }
         };
 
