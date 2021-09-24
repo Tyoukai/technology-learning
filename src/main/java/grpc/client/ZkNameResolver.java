@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -22,15 +27,14 @@ import io.grpc.NameResolver;
  * @author zhangkwei <zhangkewei@kuaishou.com>
  * Created on 2021-06-26
  */
-public class ZkNameResolver extends NameResolver implements Watcher {
+public class ZkNameResolver extends NameResolver {
     // zk的地址
     private URI zkUri;
 
     // zk上放置指定服务的地址
-    private String grpcServerUrlPathInZk = "/grpc_server_url";
+    private static String GRPC_SERVER_PATH = "/grpc/server";
 
-    // zk连接
-    private ZooKeeper zookeeper;
+    private CuratorFramework curatorClient;
 
     private final int ZK_CONN_TIMEOUT = 3000;
 
@@ -42,48 +46,43 @@ public class ZkNameResolver extends NameResolver implements Watcher {
 
     @Override
     public String getServiceAuthority() {
-        return null;
+        return "none";
     }
 
     @Override
     public void shutdown() {
-        try {
-            zookeeper.close();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        curatorClient.close();
     }
 
     @Override
     public void start(Listener listener) {
         this.listener = listener;
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
-        String zkAddress = zkUri.getHost() + ":" + zkUri.getPort();
-        try {
-            zookeeper = new ZooKeeper(zkAddress, ZK_CONN_TIMEOUT, new Watcher() {
-                @Override
-                public void process(WatchedEvent watchedEvent) {
-                    if (watchedEvent.getState() == KeeperState.SyncConnected) {
-                        countDownLatch.countDown();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            System.out.println("连接zookeeper出错");
-        }
+
+        curatorClient = CuratorFrameworkFactory.builder()
+                .connectString(zkUri.getPath().substring(1))
+                .connectionTimeoutMs(ZK_CONN_TIMEOUT)
+                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
+                .build();
+        curatorClient.start();
+
+        PathChildrenCache cache = new PathChildrenCache(curatorClient, GRPC_SERVER_PATH, true);
+        cache.getListenable().addListener((curatorFramework, event) -> {
+            ChildData childData = event.getData();
+            System.out.println(new String(childData.getData()));
+            switch (event.getType()) {
+                case CHILD_REMOVED:
+                case CHILD_ADDED:
+                case CHILD_UPDATED:
+                    System.out.println("data change");
+            }
+        });
 
         try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            List<String> servers = zookeeper.getChildren(grpcServerUrlPathInZk, this);
+            cache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
+            List<String> servers = curatorClient.getChildren().forPath(GRPC_SERVER_PATH);
             addServersToListener(servers);
-        } catch (KeeperException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,21 +96,5 @@ public class ZkNameResolver extends NameResolver implements Watcher {
             addressGroups.add(new EquivalentAddressGroup(socketAddresses));
         }
         listener.onAddresses(addressGroups, Attributes.EMPTY);
-    }
-
-    @Override
-    public void process(WatchedEvent watchedEvent) {
-        if (watchedEvent.getType() == EventType.None) {
-            System.out.println("连接断开");
-        } else {
-            try {
-                List<String> servers = zookeeper.getChildren(grpcServerUrlPathInZk, this);
-                addServersToListener(servers);
-            } catch (KeeperException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -20,14 +20,14 @@ public class GrpcClient {
         try {
 //            channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
             channel = ManagedChannelBuilder
-                        .forTarget("127.0.0.1:2181")
+                        .forTarget("42.192.49.234:2181")
                         .nameResolverFactory(new ZkNameResolverProvider())
-//                        .enableRetry()
-//                        .maxRetryAttempts(3)
-//                        .keepAliveTime(5, TimeUnit.SECONDS)
-//                        .keepAliveWithoutCalls(true)
-//                        .keepAliveTimeout(10, TimeUnit.MINUTES)
-//                        .idleTimeout(24, TimeUnit.HOURS)
+                        .enableRetry()
+                        .maxRetryAttempts(3)
+                        .keepAliveTime(5, TimeUnit.SECONDS)
+                        .keepAliveWithoutCalls(true)
+                        .keepAliveTimeout(10, TimeUnit.MINUTES)
+                        .idleTimeout(24, TimeUnit.HOURS)
 //                        .defaultLoadBalancingPolicy("default")
                         .usePlaintext()
                         .build();
