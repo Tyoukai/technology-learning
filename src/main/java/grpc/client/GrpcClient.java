@@ -25,7 +25,7 @@ public class GrpcClient {
                         .keepAliveWithoutCalls(true)
                         .keepAliveTimeout(10, TimeUnit.MINUTES)
                         .idleTimeout(24, TimeUnit.HOURS)
-//                        .defaultLoadBalancingPolicy("default")
+                        .defaultLoadBalancingPolicy("round_robin") // pick_first,grpclb,HealthCheckingRoundRobin
                         .usePlaintext()
                         .build();
 

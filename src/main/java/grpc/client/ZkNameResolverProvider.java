@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import io.grpc.Attributes;
 import io.grpc.NameResolver;
-import io.grpc.NameResolver.Args;
 import io.grpc.NameResolverProvider;
 
 /**

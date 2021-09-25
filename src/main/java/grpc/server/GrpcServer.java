@@ -13,7 +13,7 @@ public class GrpcServer {
 
             int port = 50051;
             final Server server = ServerBuilder.forPort(port)
-                    .addService(new TransferAccountServiceImpl())
+                    .addService(new TransferAccountServiceImpl(port))
                     .build()
                     .start();
             System.out.println("Server started, listening on " + port);

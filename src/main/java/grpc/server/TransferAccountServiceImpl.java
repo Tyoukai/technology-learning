@@ -10,10 +10,17 @@ import grpc.generated.service.TransferAccountServiceGrpc.TransferAccountServiceI
  */
 public class TransferAccountServiceImpl extends TransferAccountServiceImplBase {
 
+    private int port;
+
+    public TransferAccountServiceImpl(int port) {
+        this.port = port;
+    }
+
     @Override
     public void transferAccount(TransferAccountRequest request,
             io.grpc.stub.StreamObserver<TransferAccountResponse> responseObserver) {
-        System.out.println(request.toString());
+//        System.out.println(request.toString() );
+        System.out.println("port:" + port);
         TransferAccountResponse response = TransferAccountResponse.newBuilder()
                 .setCode(0)
                 .setMsg("success")
