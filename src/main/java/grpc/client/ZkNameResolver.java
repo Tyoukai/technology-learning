@@ -31,17 +31,22 @@ public class ZkNameResolver extends NameResolver {
     // zk的地址
     private URI zkUri;
 
+    private String serviceName;
+
     // zk上放置指定服务的地址
-    private static String GRPC_SERVER_PATH = "/grpc/server";
+    private static String GRPC_SERVER_PATH = "/grpc/server/";
 
     private CuratorFramework curatorClient;
+
+    private  PathChildrenCache cache;
 
     private final int ZK_CONN_TIMEOUT = 3000;
 
     private Listener listener;
 
-    ZkNameResolver(URI zkUri) {
+    ZkNameResolver(URI zkUri, String serviceName) {
         this.zkUri = zkUri;
+        this.serviceName = serviceName;
     }
 
     @Override
@@ -59,35 +64,38 @@ public class ZkNameResolver extends NameResolver {
         this.listener = listener;
 
         curatorClient = CuratorFrameworkFactory.builder()
-                .connectString(zkUri.getPath().substring(1))
+                .connectString(zkUri.getHost() + ":" + zkUri.getPort())
                 .connectionTimeoutMs(ZK_CONN_TIMEOUT)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
                 .build();
         curatorClient.start();
 
-        PathChildrenCache cache = new PathChildrenCache(curatorClient, GRPC_SERVER_PATH, true);
+        cache = new PathChildrenCache(curatorClient, packagingService(), true);
         cache.getListenable().addListener((curatorFramework, event) -> {
             ChildData childData = event.getData();
-            System.out.println(new String(childData.getData()));
+
             switch (event.getType()) {
                 case CHILD_REMOVED:
+                    System.out.println("delete");
+                    addServersToListener();
+                    break;
                 case CHILD_ADDED:
                 case CHILD_UPDATED:
-                    System.out.println("data change");
+                    addServersToListener();
+                    System.out.println(new String(childData.getData()));
             }
         });
 
         try {
             cache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
-            List<String> servers = curatorClient.getChildren().forPath(GRPC_SERVER_PATH);
-            addServersToListener(servers);
-
+            addServersToListener();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void addServersToListener (List<String> servers) {
+    private void addServersToListener() throws Exception {
+        List<String> servers = curatorClient.getChildren().forPath(packagingService());
         List<EquivalentAddressGroup> addressGroups = new ArrayList<>();
         for (String server : servers) {
             List<SocketAddress> socketAddresses = new ArrayList<>();
@@ -96,5 +104,11 @@ public class ZkNameResolver extends NameResolver {
             addressGroups.add(new EquivalentAddressGroup(socketAddresses));
         }
         listener.onAddresses(addressGroups, Attributes.EMPTY);
+    }
+
+    private String packagingService() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(GRPC_SERVER_PATH).append(serviceName);
+        return sb.toString();
     }
 }

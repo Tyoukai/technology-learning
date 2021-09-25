@@ -17,6 +17,13 @@ import io.grpc.NameResolverProvider;
  */
 public class ZkNameResolverProvider extends NameResolverProvider {
 
+    // 服务的名称
+    private String serviceName;
+
+    public ZkNameResolverProvider(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     // 服务是否可用
     @Override
     protected boolean isAvailable() {
@@ -39,7 +46,7 @@ public class ZkNameResolverProvider extends NameResolverProvider {
     @Nullable
     @Override
     public NameResolver newNameResolver(URI targetUri, Attributes params) {
-        return new ZkNameResolver(targetUri);
+        return new ZkNameResolver(targetUri, serviceName);
     }
 
 }

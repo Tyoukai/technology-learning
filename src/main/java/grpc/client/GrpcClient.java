@@ -1,7 +1,5 @@
 package grpc.client;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import grpc.generated.parameter.TransferAccountRequest;
@@ -18,10 +16,9 @@ public class GrpcClient {
     public static void main(String[] args) {
         ManagedChannel channel = null;
         try {
-//            channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
             channel = ManagedChannelBuilder
-                        .forTarget("42.192.49.234:2181")
-                        .nameResolverFactory(new ZkNameResolverProvider())
+                        .forTarget("zk://42.192.49.234:2181")
+                        .nameResolverFactory(new ZkNameResolverProvider("grpc_TransferAccountService"))
                         .enableRetry()
                         .maxRetryAttempts(3)
                         .keepAliveTime(5, TimeUnit.SECONDS)
@@ -34,15 +31,18 @@ public class GrpcClient {
 
             TransferAccountServiceGrpc.TransferAccountServiceBlockingStub stub = TransferAccountServiceGrpc.newBlockingStub(channel);
 
-            TransferAccountResponse response = stub.transferAccount(TransferAccountRequest
-                    .newBuilder()
-                    .setAmount(11)
-                    .setFromUserId("zkw")
-                    .setToUserId("wang")
-                    .setTimestamp(334)
-                    .build());
+            while (true) {
+                TransferAccountResponse response = stub.transferAccount(TransferAccountRequest
+                        .newBuilder()
+                        .setAmount(11)
+                        .setFromUserId("zkw")
+                        .setToUserId("wang")
+                        .setTimestamp(334)
+                        .build());
+                System.out.println(response.getCode() + "," + response.getMsg());
+                Thread.sleep(2000);
+            }
 
-            System.out.println(response.getCode() + "," + response.getMsg());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
