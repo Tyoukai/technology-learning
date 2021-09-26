@@ -8,5 +8,6 @@ package transfer.account;
 import "transfer_account_message.proto";
 
 service TransferAccountService {
-  rpc transferAccount(TransferAccountRequest) returns (TransferAccountResponse);
-}
+   rpc transferAccount(TransferAccountRequest) returns (TransferAccountResponse); // 转账
+   rpc queryAccount(QueryAccountRequest) returns (QueryAccountResponse); // 查询账户信息
+ }
