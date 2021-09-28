@@ -65,6 +65,12 @@
             <artifactId>grpc-netty</artifactId>
             <version>${grpc.version}</version>
         </dependency>
+        <!-- grpc 反射相关包 -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-services</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.api.grpc</groupId>
