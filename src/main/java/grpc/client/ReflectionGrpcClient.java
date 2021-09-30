@@ -16,7 +16,6 @@ import io.grpc.stub.StreamObserver;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -25,11 +24,11 @@ import java.util.stream.Collectors;
 public class ReflectionGrpcClient {
     public static void main(String[] args) throws InterruptedException {
 
-        String requestContent = "{\"amount\":1,\"from_user_id\" : \"zkw\",\"to_user_id\": \"wang\",\"timestamp\": 334}";
-        String methodSymbol = "transfer.account.transferAccount";
+        String requestContent = "{\"amount\":1,\"from_user_id\" : \"zkw111\",\"to_user_id\": \"wang\",\"timestamp\": 334}";
+        String methodSymbol = "transfer.account.TransferAccountService.transferAccount";
 
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("192.168.199.179", 50051)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
                 .usePlaintext()
                 .build();
 
@@ -50,21 +49,26 @@ public class ReflectionGrpcClient {
 
             @Override
             public void onError(Throwable t) {
-
+                System.out.println(t.toString());
             }
 
             @Override
             public void onCompleted() {
+                System.out.println("onCompleted");
             }
         };
         StreamObserver<ServerReflectionRequest> requestStreamObserver= stub.serverReflectionInfo(responseStreamObserver);
 
         ServerReflectionRequest request = ServerReflectionRequest.newBuilder()
-                .setFileContainingSymbol("transfer.account.transferAccount")
+                .setFileContainingSymbol(methodSymbol)
                 .build();
 
         requestStreamObserver.onNext(request);
-        channel.awaitTermination(10, TimeUnit.SECONDS);
+
+        Thread.sleep(2000);
+//        while (true) {
+//            Thread.sleep(10000);
+//        }
     }
 
     private static void handleResponse(List<ByteString> fileDescriptorProtoList,
@@ -217,7 +221,7 @@ public class ReflectionGrpcClient {
                 .usingTypeRegistry(registry)
                 .includingDefaultValueFields();
         String responseContent = printer.print(response);
-
+        System.out.println(requestContent);
     }
 
     /**
