@@ -63,12 +63,11 @@ public class ReflectionGrpcClient {
                 .setFileContainingSymbol(methodSymbol)
                 .build();
 
-        requestStreamObserver.onNext(request);
-
-        Thread.sleep(2000);
-//        while (true) {
-//            Thread.sleep(10000);
-//        }
+//        Thread.sleep(2000);
+        while (true) {
+            requestStreamObserver.onNext(request);
+            Thread.sleep(2000);
+        }
     }
 
     private static void handleResponse(List<ByteString> fileDescriptorProtoList,
@@ -221,7 +220,7 @@ public class ReflectionGrpcClient {
                 .usingTypeRegistry(registry)
                 .includingDefaultValueFields();
         String responseContent = printer.print(response);
-        System.out.println(requestContent);
+        System.out.println(responseContent);
     }
 
     /**
