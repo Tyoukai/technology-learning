@@ -1,13 +1,21 @@
 package com.springcloud.learning.others;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MonoDemo {
 
     public static void main(String[] args) {
 //        doOnErrorOrSuccess();
 //        map();
-        then();
+//        then();
+//        publishOn();
+//        doOnNext();
+        onErrorMap();
     }
 
     public static void fromCallable() {
@@ -30,8 +38,35 @@ public class MonoDemo {
                 .subscribe(System.out::println);
     }
 
-    public static void publishOn() {
+    public static void doOnNext() {
+        Map<String, String> map = new HashMap<>();
+        Mono.just("sss")
+                .doOnNext(s -> {
+                    map.put(s, s);
+                })
+                .subscribe(s -> {
+                    String t = s + "ttt";
+                    map.put(t, t);
+                });
 
+        System.out.println(map);
+    }
+
+    public static void onErrorMap() {
+        Mono.just(1)
+                .map(s -> s / 1)
+                .onErrorMap(e -> new Exception("error map"))
+                .subscribe(System.out::println);
+    }
+
+    public static void publishOn() {
+        Mono.just("sssss")
+                .publishOn(Schedulers.newElastic("publishOn"))
+                .filter(s -> {
+                    System.out.println("current thread:" + Thread.currentThread().getName());
+                    return s.startsWith("y");
+                })
+                .subscribe(System.out::println);
     }
 
     public static void map() {
