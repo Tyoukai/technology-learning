@@ -1,9 +1,17 @@
 package com.springcloud.learning.filter;
 
+import io.netty.util.CharsetUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import sun.misc.IOUtils;
+
+import java.io.IOException;
 
 /**
  * 日志相关的过滤器
@@ -23,13 +31,18 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
             exchange.getAttributes().put(REQUESR_BEGIN_TIME, System.currentTimeMillis());
 
             return chain.filter(exchange).then(
-                    Mono.fromRunnable(() -> {
+                    Mono.defer(() -> {
                         Long startTime = exchange.getAttribute(REQUESR_BEGIN_TIME);
                         if (startTime != null) {
                             String cost = String.valueOf(System.currentTimeMillis() - startTime);
                             System.out.println("cost:" + cost);
-                            exchange.getResponse().getCookies();
+                            String responseCost = "cost: " + cost;
+                            byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
+                            ServerHttpResponse response = exchange.getResponse();
+                            DataBuffer buffer = response.bufferFactory().allocateBuffer(byteResponseCost.length).write(byteResponseCost);
+                            return response.writeWith(Flux.just(buffer));
                         }
+                        return Mono.empty();
                     })
             );
         });
