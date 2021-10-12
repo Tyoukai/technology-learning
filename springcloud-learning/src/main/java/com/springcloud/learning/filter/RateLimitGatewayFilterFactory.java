@@ -60,11 +60,6 @@ public class RateLimitGatewayFilterFactory extends AbstractGatewayFilterFactory<
         private String appKey;
         private int qps;
 
-        public void Config(String appKey, int qps) {
-            this.appKey = appKey;
-            this.qps = qps;
-        }
-
         public String getAppKey() {
             return appKey;
         }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * grpc 泛化调用过滤器
  */
-@Component
+//@Component
 public class GrpcRouteGatewayFilterFactory extends AbstractGatewayFilterFactory<GrpcRouteGatewayFilterFactory.Config> {
 
     @Override

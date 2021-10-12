@@ -21,6 +21,14 @@ spring:
             args:
               appKey: sss
               qps: 10
+      - id: log_record
+        uri: http://localhost:8080/test/logRecord/
+        predicates:
+          - Path=/logRecord
+        filters:
+          - name: LogRecord
+            args:
+              appKey: logRecord
 
 # 动态路由配置
 management:

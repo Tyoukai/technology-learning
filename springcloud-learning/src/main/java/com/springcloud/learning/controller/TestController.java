@@ -12,4 +12,9 @@ public class TestController {
     public Mono<String> rateLimit() {
         return Mono.just("rate-limit");
     }
+
+    @RequestMapping("/logRecord")
+    public Mono<String> logRecord() {
+        return Mono.just("log-record");
+    }
 }
