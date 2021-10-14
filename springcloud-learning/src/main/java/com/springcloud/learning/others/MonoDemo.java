@@ -6,6 +6,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class MonoDemo {
 
@@ -15,14 +16,30 @@ public class MonoDemo {
 //        then();
 //        publishOn();
 //        doOnNext();
-        onErrorMap();
+//        onErrorMap();
+//        fromCallable();
+        defer();
     }
 
     public static void fromCallable() {
         System.out.println("start:" + System.currentTimeMillis());
-        Mono.fromCallable(() -> {
-            return "a";
-        }).subscribe(System.out::println);
+        Mono<String> s = Mono.fromCallable(() -> "a");
+
+    }
+
+    public static void defer() {
+        Supplier<? extends Mono<? extends Integer>> supplier = new Supplier() {
+
+            @Override
+            public Mono<Integer> get() {
+                return Mono.just(1111);
+            }
+        };
+        Mono<Integer> integerMono = Mono.defer(supplier);
+        integerMono.subscribe(System.out::println);
+
+        Mono<Integer> integerMono1 = Mono.defer(() -> Mono.just(1111));
+        integerMono1.subscribe(System.out::println);
     }
 
     public static void doOnErrorOrSuccess() {

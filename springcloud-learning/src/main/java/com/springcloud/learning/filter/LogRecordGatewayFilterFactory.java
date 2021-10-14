@@ -38,16 +38,13 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
                             e.printStackTrace();
                         }
                         Long startTime = exchange.getAttribute(REQUESR_BEGIN_TIME);
-                        if (startTime != null) {
-                            String cost = String.valueOf(System.currentTimeMillis() - startTime);
-                            System.out.println("cost:" + cost);
-                            String responseCost = "cost: " + cost;
-                            byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
-                            ServerHttpResponse response = exchange.getResponse();
-                            DataBuffer buffer = response.bufferFactory().allocateBuffer(byteResponseCost.length).write(byteResponseCost);
-                            return response.writeWith(Flux.just(buffer));
-                        }
-                        return Mono.empty();
+                        String cost = String.valueOf(System.currentTimeMillis() - startTime);
+                        System.out.println("cost:" + cost);
+                        String responseCost = "cost: " + cost;
+                        byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
+                        ServerHttpResponse response = exchange.getResponse();
+                        DataBuffer buffer = response.bufferFactory().allocateBuffer(byteResponseCost.length).write(byteResponseCost);
+                        return response.writeWith(Flux.just(buffer));
                     })
             );
         });
