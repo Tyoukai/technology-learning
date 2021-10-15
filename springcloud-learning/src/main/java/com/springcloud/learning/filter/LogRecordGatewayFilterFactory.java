@@ -7,6 +7,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sun.misc.IOUtils;
@@ -29,6 +30,7 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             exchange.getAttributes().put(REQUESR_BEGIN_TIME, System.currentTimeMillis());
+            MultiValueMap<String, String> map = exchange.getRequest().getQueryParams();
 
             return chain.filter(exchange).then(
                     Mono.defer(() -> {
