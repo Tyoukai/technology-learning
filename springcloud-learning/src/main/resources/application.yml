@@ -29,6 +29,10 @@ spring:
           - name: LogRecord
             args:
               appKey: logRecord
+      - id: grpc_transfer_account
+        uri: /grpc/server/grpc_TransferAccountService/transferAccount    #grpc在zk上注册的路由路径/具体的服务名称
+        predicates:
+          - Path=/transferAccount
 
 # 动态路由配置
 management:
