@@ -75,9 +75,8 @@ public class GrpcRouteFilter implements GlobalFilter, Ordered {
         if (route == null) {
             return null;
         }
-        String fullMethodName = route.getUri().getPath();
-        String methodName = fullMethodName.substring(fullMethodName.lastIndexOf('/') + 1);
-        String serviceName = fullMethodName.substring(0, methodName.lastIndexOf('/'));
+        String methodName = route.getUri().getPath().substring(1);
+        String serviceName = route.getUri().getAuthority().replaceAll("\\.", "/");
         return Pair.of(serviceName, methodName);
     }
 
@@ -91,18 +90,19 @@ public class GrpcRouteFilter implements GlobalFilter, Ordered {
      */
     private Pair<String, String> getMethodMetaData(Pair<String, String> metaData) {
         try {
-            List<String> serviceIpAndPortList = curatorClient.getChildren().forPath(metaData.getLeft());
+            String zkPath = SPILT_SLASH + metaData.getLeft();
+            List<String> serviceIpAndPortList = curatorClient.getChildren().forPath(zkPath);
             if (CollectionUtils.isEmpty(serviceIpAndPortList)) {
                 return Pair.of(null, null);
             }
             // 随机获取一个ip访问
             Random random = new Random();
             String ipAndPort = serviceIpAndPortList.get(random.nextInt(serviceIpAndPortList.size()));
-            String fullMethodNames = new String(curatorClient.getData().forPath(metaData.getLeft()));
+            String fullMethodNames = new String(curatorClient.getData().forPath(zkPath));
 
             String[] fullMethodNameArray = fullMethodNames.split(SPLIT_COMMA);
             for (String fullMethodName : fullMethodNameArray) {
-                if (metaData.getRight().equals(fullMethodName.substring(fullMethodName.lastIndexOf(SPLIT_POINT) + 1))) {
+                if (metaData.getRight().equals(fullMethodName.substring(fullMethodName.lastIndexOf(SPILT_SLASH) + 1))) {
                     return Pair.of(ipAndPort, fullMethodName);
                 }
             }

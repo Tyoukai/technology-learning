@@ -3,13 +3,16 @@ package grpc.server;
 import grpc.generated.parameter.TransferAccountRequest;
 import grpc.generated.parameter.TransferAccountResponse;
 import grpc.generated.service.TransferAccountServiceGrpc.TransferAccountServiceImplBase;
+import io.grpc.ServerMethodDefinition;
+import io.grpc.ServerServiceDefinition;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
@@ -29,8 +32,18 @@ public class TransferAccountServiceImpl extends TransferAccountServiceImplBase i
                 .build();
         curatorClient.start();
         InetAddress ip = InetAddress.getLocalHost();
+        // 将ip和端口写入临时节点
         curatorClient.create().withMode(CreateMode.EPHEMERAL)
                 .forPath(registerPath + getServiceName() + "/" + ip.getHostAddress() + ":" + port);
+        // 将服务对应的方法写入到zk中
+        StringBuffer sb = new StringBuffer();
+        ServerServiceDefinition definition = super.bindService();
+        Collection<ServerMethodDefinition<?, ?>> methods =  definition.getMethods();
+        for (ServerMethodDefinition methodDefinition : methods) {
+            String fullMethodName = methodDefinition.getMethodDescriptor().getFullMethodName();
+            sb.append(fullMethodName + ",");
+        }
+        curatorClient.setData().forPath(registerPath + getServiceName(), sb.toString().substring(0, sb.length() - 1).getBytes());
     }
 
     @Override

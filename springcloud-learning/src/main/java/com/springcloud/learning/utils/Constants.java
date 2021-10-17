@@ -9,4 +9,5 @@ public class Constants {
     public static String SPLIT_COMMA = ",";
     public static String SPLIT_POINT = ".";
     public static String SPLIT_COLON = ":";
+    public static String SPILT_SLASH = "/";
 }
