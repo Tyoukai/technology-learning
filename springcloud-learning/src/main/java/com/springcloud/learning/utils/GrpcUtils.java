@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.springcloud.learning.utils.Constants.SPILT_SLASH;
@@ -38,12 +39,14 @@ public class GrpcUtils {
      */
     public static String grpcGeneralizedCall(String ip, String port, String request, String method) {
 
-        List<String> grpcCallResponseList = new ArrayList<>();
+        String newMethod = method.replace("/", ".");
         ManagedChannel channel = ManagedChannelBuilder.forAddress(ip, Integer.valueOf(port))
                 .usePlaintext()
                 .build();
 
         ServerReflectionGrpc.ServerReflectionStub stub = ServerReflectionGrpc.newStub(channel);
+
+        List<String> messages = new ArrayList<>();
 
         StreamObserver<ServerReflectionResponse> requestStreamObserver = new StreamObserver<ServerReflectionResponse>() {
             @Override
@@ -52,7 +55,7 @@ public class GrpcUtils {
                 try {
                     if (response.getMessageResponseCase() == ServerReflectionResponse.MessageResponseCase.FILE_DESCRIPTOR_RESPONSE) {
                         List<ByteString> fileDescriptorProtoList = response.getFileDescriptorResponse().getFileDescriptorProtoList();
-                        grpcCallResponseList.add(0, handleResponse(fileDescriptorProtoList, channel, method, request));
+                        messages.add(0, handleResponse(fileDescriptorProtoList, channel, method, request));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -73,19 +76,28 @@ public class GrpcUtils {
         StreamObserver<ServerReflectionRequest> client= stub.serverReflectionInfo(requestStreamObserver);
 
         ServerReflectionRequest serverReflectionRequest = ServerReflectionRequest.newBuilder()
-                .setFileContainingSymbol(method)
+                .setFileContainingSymbol(newMethod)
                 .build();
 
         client.onNext(serverReflectionRequest);
+        try {
+            channel.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        return grpcCallResponseList.get(0);
+        if (messages.size() != 0) {
+            return messages.get(0);
+        }
+        return "{\"code\": 0,\"msg\": \"success\"}";
+
     }
 
 
     private static String handleResponse(List<ByteString> fileDescriptorProtoList,
-                                       ManagedChannel channel,
-                                       String methodFullName,
-                                       String requestContent) {
+                                         ManagedChannel channel,
+                                         String methodFullName,
+                                         String requestContent) {
         try {
             // 解析方法和服务名称
             String fullServiceName = extraPrefix(methodFullName);
@@ -244,6 +256,7 @@ public class GrpcUtils {
                 .includingDefaultValueFields();
         String responseContent = printer.print(response);
         System.out.println(responseContent);
+
         return responseContent;
     }
 
