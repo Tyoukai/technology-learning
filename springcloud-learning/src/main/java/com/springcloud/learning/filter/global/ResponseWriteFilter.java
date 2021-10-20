@@ -17,7 +17,7 @@ import static com.springcloud.learning.utils.Constants.OUTPUT_JSON_STRING;
 /**
  * response回写filter，在真正转发时，重写response
  */
-@Component
+//@Component
 public class ResponseWriteFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

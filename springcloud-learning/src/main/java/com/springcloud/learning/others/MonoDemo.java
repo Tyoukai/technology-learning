@@ -4,8 +4,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class MonoDemo {
@@ -18,13 +20,25 @@ public class MonoDemo {
 //        doOnNext();
 //        onErrorMap();
 //        fromCallable();
-        defer();
+//        defer();
+        timeout();
     }
 
     public static void fromCallable() {
         System.out.println("start:" + System.currentTimeMillis());
         Mono<String> s = Mono.fromCallable(() -> "a");
 
+    }
+
+    public static void timeout() {
+        Mono.just("111").map(str -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }).timeout(Duration.ofSeconds(1)).subscribe(System.out::println);
     }
 
     public static void defer() {
