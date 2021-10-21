@@ -9,6 +9,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
@@ -52,9 +53,11 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
                         String responseCost = "cost: " + cost;
                         byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
                         ServerHttpResponse response = exchange.getResponse();
+                        response.setStatusCode(HttpStatus.OK);
+                        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE);
                         DataBuffer buffer = response.bufferFactory().allocateBuffer(byteResponseCost.length).write(byteResponseCost);
                         return response.writeWith(Flux.just(buffer));
-                    }).timeout(Duration.ofSeconds(1))
+                    })
             );
 
 //            ServerHttpResponseDecorator decorator = new ServerHttpResponseDecorator(exchange.getResponse()) {
@@ -78,16 +81,17 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
 //                                    e.printStackTrace();
 //                                }
 //                            });
-//                            String s = joiner.join(list);
-//                            try {
-//                                if (!WrapMapper.isWrap(s)) {
-//                                    s = objectMapper.writeValueAsString(WrapMapper.ok(objectMapper.readValue(s, Object.class)));
-//                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                            System.out.println(s);
-//                            return bufferFactory().wrap(s.getBytes());
+//
+//                            System.out.println(list);
+//
+//                            Long startTime = exchange.getAttribute(REQUESR_BEGIN_TIME);
+//                            String cost = String.valueOf(System.currentTimeMillis() - startTime);
+//                            System.out.println("cost:" + cost);
+//                            String responseCost = "cost: " + cost;
+//                            byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
+//
+//                            System.out.println(responseCost);
+//                            return bufferFactory().wrap(byteResponseCost);
 //                        }));
 //                    }
 //                    return super.writeWith(body);
