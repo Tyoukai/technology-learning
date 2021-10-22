@@ -42,11 +42,6 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
 
             return chain.filter(exchange).then(
                     Mono.defer(() -> {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         Long startTime = exchange.getAttribute(REQUESR_BEGIN_TIME);
                         String cost = String.valueOf(System.currentTimeMillis() - startTime);
                         System.out.println("cost:" + cost);
@@ -59,47 +54,6 @@ public class LogRecordGatewayFilterFactory extends AbstractGatewayFilterFactory<
                         return response.writeWith(Flux.just(buffer));
                     })
             );
-
-//            ServerHttpResponseDecorator decorator = new ServerHttpResponseDecorator(exchange.getResponse()) {
-//
-//                @Override
-//                public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
-//                    if (getStatusCode().equals(HttpStatus.OK) && body instanceof Flux) {
-//
-//                        Flux<? extends DataBuffer> fluxBody = Flux.from(body);
-//                        return super.writeWith(fluxBody.buffer().map(dataBuffers -> {
-//                            List<String> list = Lists.newArrayList();
-//
-//                            dataBuffers.forEach(dataBuffer -> {
-//                                byte[] content = new byte[dataBuffer.readableByteCount()];
-//                                dataBuffer.read(content);
-//                                DataBufferUtils.release(dataBuffer);
-//
-//                                try {
-//                                    list.add(new String(content, "utf-8"));
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            });
-//
-//                            System.out.println(list);
-//
-//                            Long startTime = exchange.getAttribute(REQUESR_BEGIN_TIME);
-//                            String cost = String.valueOf(System.currentTimeMillis() - startTime);
-//                            System.out.println("cost:" + cost);
-//                            String responseCost = "cost: " + cost;
-//                            byte[] byteResponseCost = responseCost.getBytes(CharsetUtil.UTF_8);
-//
-//                            System.out.println(responseCost);
-//                            return bufferFactory().wrap(byteResponseCost);
-//                        }));
-//                    }
-//                    return super.writeWith(body);
-//                }
-//            };
-//
-//            return chain.filter(exchange.mutate().response(decorator).build());
-
         });
     }
 
