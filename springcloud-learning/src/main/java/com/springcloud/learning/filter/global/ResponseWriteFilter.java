@@ -4,6 +4,7 @@ import com.springcloud.learning.others.GlobalFilterOrderEnum;
 import io.netty.util.CharsetUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -12,22 +13,27 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.springcloud.learning.others.GlobalFilterOrderEnum.RESPONSE_WRITE;
 import static com.springcloud.learning.utils.Constants.OUTPUT_JSON_STRING;
 
 /**
  * response回写filter，在真正转发时，重写response
  */
-//@Component
+@Component
 public class ResponseWriteFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+//        ResponseWriteServerHttpResponseDecorator decorator =
+//                new ResponseWriteServerHttpResponseDecorator(exchange);
+//
+//        return chain.filter(exchange).then(Mono.defer(() -> {
+//            exchange.mutate().response(decorator).build();
+//            return Mono.empty();
+//        }));
+
+
+
         return chain.filter(exchange).then(Mono.defer(() -> {
-            // 当前的无奈之举
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             String result = (String) exchange.getAttributes().get(OUTPUT_JSON_STRING);
             byte[] byteResult = result.getBytes(CharsetUtil.UTF_8);
             ServerHttpResponse response = exchange.getResponse();
@@ -38,6 +44,8 @@ public class ResponseWriteFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return GlobalFilterOrderEnum.RESPONSE_WRITE.getOrder();
+        //WRITE_RESPONSE_FILTER 之前执行
+//        return NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1;
+        return RESPONSE_WRITE.getOrder();
     }
 }

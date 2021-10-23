@@ -11,7 +11,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sun.misc.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 //@Component
 public class TestFilter implements GlobalFilter, Ordered {
@@ -26,13 +28,20 @@ public class TestFilter implements GlobalFilter, Ordered {
                     //响应信息转换为字符串
                     String reqBody = "cost 123";
 //                    try {
-//                        dataBuffer 转换为String
-//                        reqBody = IOUtils
-//                                .toString(dataBuffer.asInputStream(), "UTF-8")
-//                                .replaceAll(">\\s{1,}<", "><");
+////                        dataBuffer 转换为String
+//                        BufferedReader reader = new BufferedReader(new InputStreamReader(dataBuffer.asInputStream()));
+//                        StringBuffer sb = new StringBuffer();
+//                        String s;
+//                        while ((s = reader.readLine()) != null) {
+//                            sb.append(s);
+//                        }
+////                        reqBody = IOUtils
+////                                .toString(dataBuffer.asInputStream(), "UTF-8")
+////                                .replaceAll(">\\s{1,}<", "><");
 //
-//                        System.out.println(reqBody);
-//                    } catch (IOException e) {
+//                        System.out.println(sb.toString());
+//                        reqBody = sb.toString();
+//                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
                     return reqBody;

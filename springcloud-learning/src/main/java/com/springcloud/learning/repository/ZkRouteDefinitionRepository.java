@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 动态路由配置，存储介质zookeeper
  */
-@Component
+//@Component
 public class ZkRouteDefinitionRepository implements RouteDefinitionRepository, ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher applicationEventPublisher;
