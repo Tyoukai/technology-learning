@@ -6,9 +6,6 @@
     <groupId>com.grpc.example</groupId>
     <artifactId>grpcjava</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <modules>
-        <module>springcloud-learning</module>
-    </modules>
     <packaging>pom</packaging>
 
     <name>grpc-java-demo</name>
@@ -23,26 +20,6 @@
         <protoc.version>3.5.1-1</protoc.version>
         <netty.tcnative.version>4.1.22.Final</netty.tcnative.version>
     </properties>
-
-    <!-- spring cloud相关-->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.0.5.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Finchley.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
