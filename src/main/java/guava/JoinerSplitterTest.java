@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class StringUtilsTest {
+public class JoinerSplitterTest {
     public static void main(String[] args) {
         join();
         split();
