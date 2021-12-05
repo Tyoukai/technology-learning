@@ -1,16 +1,23 @@
 package java8;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
  * Created on 2021-04-27
  */
 public class Test {
     public static void main(String[] args) {
-        System.out.println("");
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "1");
+        map.put("2", "2");
+        map.put("3", "3");
 
-        for (int i = 301; i <= 997 ; i = i + 8) {
-            System.out.println("update hst_data_shard_config_log set config = '{\"startDateStr\":\"2020-11-23\","
-                    + "\"step\":\"3\",\"finalDateStr\":\"2020-08-01\"}' where name = 'MerchantThirdRefundOrderHistorySyncTask' and shard_id = " + i + ";");
-        }
+        System.out.println(map);
+
+        map.values().removeIf(item -> "3".equals(item));
+
+        System.out.println(map);
     }
 }
