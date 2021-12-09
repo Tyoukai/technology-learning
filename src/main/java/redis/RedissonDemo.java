@@ -7,6 +7,8 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class RedissonDemo {
     public static void main(String[] args) {
         Config config = new Config();
@@ -18,8 +20,8 @@ public class RedissonDemo {
         RedissonClient client = Redisson.create(config);
 
 //        string(client);
-//        hash((client));
-        hashHincrBy(client);
+        hash((client));
+//        hashHincrBy(client);
 
 
 
@@ -35,8 +37,12 @@ public class RedissonDemo {
 
     public static void hash(RedissonClient client) {
         RMap<Object, Object> hash = client.getMap("hashTest", new StringCodec("utf-8"));
-        hash.put("expireTime", 1638692010000L);
-        hash.put("count", 100);
+        hash.put("expireTime", "1638692010000");
+        hash.put("count", "100");
+        System.out.println(hash.addAndGet("count", 100) instanceof String);
+        int count = Integer.parseInt(hash.addAndGet("count", 100).toString());
+        System.out.println(count);
+
     }
 
     public static void hashHincrBy(RedissonClient client) {

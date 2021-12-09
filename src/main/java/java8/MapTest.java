@@ -15,9 +15,9 @@ public class MapTest {
 
 
     public static void main(String[] args) {
-//        computeIfAbsentTest();
+        computeIfAbsentTest();
 //        consumerTest();
-        multiMapTest();
+//        multiMapTest();
     }
 
     public static void multiMapTest() {
@@ -44,11 +44,10 @@ public class MapTest {
 
         System.out.println(map.toString());
 
-        map.computeIfAbsent("3", k -> "4");
+        String value = map.computeIfAbsent("3", k -> "4");
+        System.out.println(value);
 
-        map.computeIfAbsent("4", k -> {
-            return "4";
-        });
+        map.computeIfAbsent("4", k -> "4");
 
 
         System.out.println(map);
