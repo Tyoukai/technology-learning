@@ -9,6 +9,8 @@ import com.google.common.util.concurrent.RateLimiter;
 public class RateLimiterTest {
     public static void main(String[] args) {
         singleLimiter();
+//        testSmoothBursty2();
+//        testSmoothBursty3();
     }
 
     private static void singleLimiter() {
@@ -18,4 +20,39 @@ public class RateLimiterTest {
             System.out.println("i:" + i + ", 等待的时间:" + waitTime);
         }
     }
+
+    public static void testSmoothBursty2() {
+        RateLimiter r = RateLimiter.create(2);
+        while (true)
+        {
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+
+            }
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("get 1 tokens: " + r.acquire(1) + "s");
+            System.out.println("end");
+        }
+    }
+
+    public static void testSmoothBursty3() {
+        RateLimiter r = RateLimiter.create(10);
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+
+        }
+
+        while (true) {
+            System.out.println("get 1 tokens: " + r.acquire() + "s");
+        }
+    }
+
+
+
+
+
 }
