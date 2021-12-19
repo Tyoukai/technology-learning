@@ -8,9 +8,10 @@ import com.google.common.util.concurrent.RateLimiter;
  */
 public class RateLimiterTest {
     public static void main(String[] args) {
-        singleLimiter();
+//        singleLimiter();
 //        testSmoothBursty2();
 //        testSmoothBursty3();
+        setRate();
     }
 
     private static void singleLimiter() {
@@ -48,6 +49,18 @@ public class RateLimiterTest {
 
         while (true) {
             System.out.println("get 1 tokens: " + r.acquire() + "s");
+        }
+    }
+
+    public static void setRate() {
+        RateLimiter rateLimiter = RateLimiter.create(2);
+        long now = System.currentTimeMillis();
+        while (true) {
+            if ((System.currentTimeMillis() - now) > 5000) {
+                rateLimiter.setRate(10);
+                System.out.println("----------rate change-----------");
+            }
+            System.out.println("get 1 tokens: " + rateLimiter.acquire() + "s" + "current rate: " + rateLimiter.getRate());
         }
     }
 
