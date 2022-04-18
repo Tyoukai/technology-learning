@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -33,5 +30,8 @@ public class Test {
         for (; i< t; i++ ) {
             System.out.println(i / 3600);
         }
+
+        int[][] a = new int[4][3];
+        Arrays.sort(a, (int[] m, int[] n) -> m[0] - n[0]);
     }
 }
