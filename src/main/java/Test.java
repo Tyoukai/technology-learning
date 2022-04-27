@@ -33,5 +33,14 @@ public class Test {
 
         int[][] a = new int[4][3];
         Arrays.sort(a, (int[] m, int[] n) -> m[0] - n[0]);
+
+        Map<String, String> map = new HashMap<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+        }
+
+        String aaa = "aaaa";
+        String bbb = new String("aaaa");
+
+        System.out.println(aaa == bbb);
     }
 }
