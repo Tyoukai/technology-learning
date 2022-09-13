@@ -24,23 +24,30 @@ public class Test {
 //
 //        System.out.println(map.get("int") instanceof String);
 
-        long i = 1639285148;
-        long t = i + 3800;
+//        long i = 1639285148;
+//        long t = i + 3800;
+//
+//        for (; i< t; i++ ) {
+//            System.out.println(i / 3600);
+//        }
+//
+//        int[][] a = new int[4][3];
+//        Arrays.sort(a, (int[] m, int[] n) -> m[0] - n[0]);
+//
+//        Map<String, String> map = new HashMap<>();
+//        for (Map.Entry<String, String> entry : map.entrySet()) {
+//        }
+//
+//        String aaa = "aaaa";
+//        String bbb = new String("aaaa");
+//
+//        System.out.println(aaa == bbb);
 
-        for (; i< t; i++ ) {
-            System.out.println(i / 3600);
+        String aa = "sleetcode";
+
+        String[] sss = aa.split("leet");
+        for (String s : sss) {
+            System.out.println(s);
         }
-
-        int[][] a = new int[4][3];
-        Arrays.sort(a, (int[] m, int[] n) -> m[0] - n[0]);
-
-        Map<String, String> map = new HashMap<>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-        }
-
-        String aaa = "aaaa";
-        String bbb = new String("aaaa");
-
-        System.out.println(aaa == bbb);
     }
 }
