@@ -18,7 +18,7 @@ public class MsgProducer {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, JsonProcessingException {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.207:9092"); // 192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.206:9092,172.16.127.207:9092,172.16.66.97:9092"); // 192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
          /*
          发出消息持久化机制参数
         （1）acks=0： 表示producer不需要等待任何broker确认收到消息的回复，就可以继续发送下一条消息。性能最高，但是最容易丢消息。

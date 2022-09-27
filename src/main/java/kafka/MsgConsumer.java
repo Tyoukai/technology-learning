@@ -20,7 +20,7 @@ public class MsgConsumer {
 
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.207:9092"); //192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.206:9092,172.16.127.207:9092,172.16.66.97:9092"); //192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
         // 消费分组名
         props.put(ConsumerConfig.GROUP_ID_CONFIG, CONSUMER_GROUP_NAME);
 
