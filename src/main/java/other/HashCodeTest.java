@@ -21,6 +21,5 @@ public class HashCodeTest {
         JsonNode node = mapper.readTree(str);
         JsonNode dataNode = node.get("data");
         System.out.println(dataNode.get("status").asText());
-
     }
 }

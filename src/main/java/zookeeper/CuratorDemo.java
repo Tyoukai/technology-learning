@@ -7,13 +7,14 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.CreateMode;
 
 public class CuratorDemo {
     private static String path = "/curator";
 
     public static void main(String[] args) throws Exception {
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString("42.192.49.234:2181")
+                .connectString("172.16.125.224:2181")  // 42.192.49.234:2181
                 .connectionTimeoutMs(2000)
                 .sessionTimeoutMs(10000)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
@@ -22,8 +23,9 @@ public class CuratorDemo {
         client.start();
 
         // 创建节点
-//        client.create().forPath("/curator", "test".getBytes());
+//        client.create().forPath("/curator333", "".getBytes());
 
+//        client.delete().forPath("/curator333");
         // 查询节点
 //        byte[] data = client.getData().forPath("/curator");
 //        System.out.println(new String(data));
@@ -33,6 +35,10 @@ public class CuratorDemo {
 //
 //        data = client.getData().forPath("/curator");
 //        System.out.println(new String(data));
+
+        client.create().withMode(CreateMode.EPHEMERAL).forPath("/dailyProcessCheckLock", "".getBytes());
+
+        client.delete().forPath("/dailyProcessCheckLock");
 
         System.out.println(client.getChildren().forPath(path));
 
