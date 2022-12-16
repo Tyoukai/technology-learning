@@ -15,12 +15,13 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class MsgConsumer {
-    private final static String TOPIC_NAME = "test-topic-order-1";
-    private final static String CONSUMER_GROUP_NAME = "testGroup";
+    private final static String TOPIC_NAME = "kafka-test-origin";
+    private final static String CONSUMER_GROUP_NAME = "kafka-test-origin-Group";
 
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.206:9092,172.16.127.207:9092,172.16.66.97:9092"); //192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
+        // 172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092"); //192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
         // 消费分组名
         props.put(ConsumerConfig.GROUP_ID_CONFIG, CONSUMER_GROUP_NAME);
 

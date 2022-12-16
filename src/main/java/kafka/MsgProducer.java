@@ -14,11 +14,12 @@ import java.util.concurrent.TimeUnit;
  * @Date 2022/9/13 11:15
  */
 public class MsgProducer {
-    private final static String TOPIC_NAME = "test-topic-order-1";
+    private final static String TOPIC_NAME = "kafka-test-origin";
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, JsonProcessingException {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.127.206:9092,172.16.127.207:9092,172.16.66.97:9092"); // 192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
+        // 172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092"); // 192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
          /*
          发出消息持久化机制参数
         （1）acks=0： 表示producer不需要等待任何broker确认收到消息的回复，就可以继续发送下一条消息。性能最高，但是最容易丢消息。
