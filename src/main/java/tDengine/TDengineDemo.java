@@ -31,10 +31,10 @@ import java.util.Properties;
 
 public class TDengineDemo {
     private static Connection getConnection() throws SQLException {
-        String jdbcUrl = "jdbc:TAOS://172.16.66.14:6030?user=root&password=taosdata";
+//        String jdbcUrl = "jdbc:TAOS://172.16.66.14:6030?user=root&password=taosdata";
         System.out.println("path" + System.getProperty("java.library.path"));
 
-//        String jdbcUrl = "jdbc:TAOS-RS://172.16.66.18:6041?user=root&password=taosdata";
+        String jdbcUrl = "jdbc:TAOS-RS://172.16.66.18:6041?user=root&password=taosdata";
         return DriverManager.getConnection(jdbcUrl);
     }
 
@@ -87,6 +87,7 @@ public class TDengineDemo {
 //                        "TAGS (location BINARY(64), groupId INT)");
                 String sql = getSQL();
                 int rowCount = stmt.executeUpdate(sql);
+                stmt.close();
                 System.out.println("rowCount=" + rowCount); // rowCount=8
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,7 +96,7 @@ public class TDengineDemo {
     }
 
     public static void main(String[] args) throws SQLException {
-        System.load("C:\\TDengine\\driver\\taos.dll");
+//        System.load("C:\\TDengine\\driver\\taos.dll");
         insertData();
     }
 }

@@ -43,11 +43,12 @@ public class Test {
 //
 //        System.out.println(aaa == bbb);
 
-        String aa = "sleetcode";
+        String aa = "sleetcode${mm}";
 
-        String[] sss = aa.split("leet");
-        for (String s : sss) {
-            System.out.println(s);
-        }
+        String bb = aa;
+
+        bb = bb.replace("${mm}", "222");
+        System.out.println(aa);
+        System.out.println(bb);
     }
 }
