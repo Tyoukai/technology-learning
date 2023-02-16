@@ -1,54 +1,38 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import java8.Person;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
  * Created on 2021-05-15
  */
 public class Test {
-    public static void main(String[] args) {
-//        List<Person> list = new ArrayList<>();
-//        list.add(new Person(1, "1"));
-//        list.add(new Person(2, "2"));
-//
-//        List<Person> list1 = new ArrayList<>(list);
-//
-//        System.out.println(list.get(0) == list1.get(0));
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("string", "string");
-//        map.put("int", 1);
-//
-//        System.out.println(map.get("int") instanceof String);
+    public static void main(String[] args) throws ParseException {
 
-//        long i = 1639285148;
-//        long t = i + 3800;
-//
-//        for (; i< t; i++ ) {
-//            System.out.println(i / 3600);
-//        }
-//
-//        int[][] a = new int[4][3];
-//        Arrays.sort(a, (int[] m, int[] n) -> m[0] - n[0]);
-//
-//        Map<String, String> map = new HashMap<>();
-//        for (Map.Entry<String, String> entry : map.entrySet()) {
-//        }
-//
-//        String aaa = "aaaa";
-//        String bbb = new String("aaaa");
-//
-//        System.out.println(aaa == bbb);
 
-        String aa = "sleetcode${mm}";
 
-        String bb = aa;
+        Long a = 223244555L;
+        Integer b = Integer.parseInt(a / 1000 + "");
+        System.out.println(b == 223244);
 
-        bb = bb.replace("${mm}", "222");
-        System.out.println(aa);
-        System.out.println(bb);
+        String date = "2023-02-16T07:15:25.359Z";
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+
+        Date after = df.parse(date);
+
+        System.out.println(DateFormatUtils.format(after, "yyyy-MM-dd HH:mm:ss"));
+
+
+        
     }
 }
