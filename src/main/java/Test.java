@@ -32,6 +32,9 @@ public class Test {
 
         System.out.println(DateFormatUtils.format(after, "yyyy-MM-dd HH:mm:ss"));
 
+        String s = "2023-02-22 18:45:50.0";
+        System.out.println(s.substring(0, s.length() - 2));
+
 
         
     }

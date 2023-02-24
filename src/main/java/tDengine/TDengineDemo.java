@@ -30,7 +30,7 @@ import java.util.Properties;
 
 
 public class TDengineDemo {
-    private static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
 //        String jdbcUrl = "jdbc:TAOS://172.16.66.14:6030?user=root&password=taosdata";
         System.out.println("path" + System.getProperty("java.library.path"));
 
@@ -68,13 +68,13 @@ public class TDengineDemo {
         for (String line : getRawData()) {
             String[] ps = line.split(",");
             sb.append("power." + ps[0]).append(" USING power.meters TAGS(")
-                    .append(ps[5]).append(", ") // tag: location
-                    .append(ps[6]) // tag: groupId
+                    .append(ps[5]).append(", ")
+                    .append(ps[6])
                     .append(") VALUES(")
-                    .append('\'').append(ps[1]).append('\'').append(",") // ts
-                    .append(ps[2]).append(",") // current
-                    .append(ps[3]).append(",") // voltage
-                    .append(ps[4]).append(") "); // phase
+                    .append('\'').append(ps[1]).append('\'').append(",")
+                    .append(ps[2]).append(",")
+                    .append(ps[3]).append(",")
+                    .append(ps[4]).append(") ");
         }
         return sb.toString();
     }
@@ -88,7 +88,7 @@ public class TDengineDemo {
                 String sql = getSQL();
                 int rowCount = stmt.executeUpdate(sql);
                 stmt.close();
-                System.out.println("rowCount=" + rowCount); // rowCount=8
+                System.out.println("rowCount=" + rowCount);
             } catch (Exception e) {
                 e.printStackTrace();
             }
