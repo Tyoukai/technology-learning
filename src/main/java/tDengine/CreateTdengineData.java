@@ -26,11 +26,11 @@ public class CreateTdengineData {
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long timestamp = 1677186000000L;
+        long timestamp = 1678294675000L;
         long current = System.currentTimeMillis();
         for (; timestamp < current; ) {
             String timeStr = format.format(timestamp);
-            int rowCount = stmt.executeUpdate(createSql(timeStr, "cpu_usage3", "机器3CPU使用率", "10982", "3"));
+            int rowCount = stmt.executeUpdate(createSql(timeStr, "cpu_usage2", "机器2CPU使用率", "10982", "2"));
             System.out.println(rowCount);
             timestamp += 60000;
         }
