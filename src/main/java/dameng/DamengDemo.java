@@ -127,7 +127,7 @@ public class DamengDemo {
      * @throws SQLException 异常 */
     public void queryProduct() throws SQLException {
         // 查询语句
-        String sql = "SELECT * FROM SYS_ORG_ROLE_CONF";
+        String sql = "select * from SYS_ORG_ROLE_CONF";
 //        String sql = "show databases";
         // 创建语句对象
         Statement stmt = conn.createStatement();
@@ -281,7 +281,7 @@ public class DamengDemo {
 //            System.out.println("--- 插入产品信息 ---");
 //            damengDemo.insertTable();
             // 查询含有大字段的产品信息
-            System.out.println("--- 显示插入结果 ---");
+//            System.out.println("--- 显示插入结果 ---");
             damengDemo.queryProduct();
             // 在修改前查询产品信息表
 //            System.out.println("--- 在修改前查询产品信息 ---");
