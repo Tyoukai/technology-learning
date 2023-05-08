@@ -18,11 +18,11 @@ public class HikariMysqlDemo {
         //实例化类
         HikariConfig hikariConfig = new HikariConfig();
         //设置url
-        hikariConfig.setJdbcUrl("jdbc:mysql://localhost:3306/cmdbtest?characterEncoding=UTF-8&useUnicode=true&useSSL=false");
+        hikariConfig.setJdbcUrl("jdbc:mysql://172.16.123.188:3306/cmdbtest?characterEncoding=UTF-8&useUnicode=true&useSSL=false");
         //数据库帐号
-        hikariConfig.setUsername("");
+        hikariConfig.setUsername("cmdbtest");
         //数据库密码
-        hikariConfig.setPassword("");
+        hikariConfig.setPassword("cmdbtest");
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -33,7 +33,9 @@ public class HikariMysqlDemo {
         try {
             conn = ds.getConnection();
             statement = conn.createStatement();
-            rs = statement.executeQuery("select * from om_data_sources");
+            rs = statement.executeQuery("select ds.id as dd, ds.name from om_data_sources ds");
+            rs.getMetaData().getColumnCount();
+            rs.getMetaData().getColumnLabel(1);
             while (rs.next()) {
                 System.out.print(rs.getString("id") + ",");
                 System.out.println(rs.getString("name"));
