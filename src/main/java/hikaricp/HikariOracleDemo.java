@@ -18,11 +18,11 @@ public class HikariOracleDemo {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("oracle.jdbc.driver.OracleDriver");
         //设置url
-        hikariConfig.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:Desendb");
+        hikariConfig.setJdbcUrl("jdbc:oracle:thin:@172.16.125.224:1521:Desendb");
         //数据库帐号
-        hikariConfig.setUsername("");
+        hikariConfig.setUsername("ekp13");
         //数据库密码
-        hikariConfig.setPassword("");
+        hikariConfig.setPassword("ekp13");
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
