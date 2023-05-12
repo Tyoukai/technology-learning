@@ -15,9 +15,13 @@ public class TransactionDemo {
             Transaction t1 = Cat.newTransaction("t1", "t1");
             Thread.sleep(1000);
             t.setStatus(Transaction.SUCCESS);
-            t1.setStatus(new Exception("t1异常"));
+            t1.setStatus(new Exception("t1异常").getMessage());
+
+            Cat.logError(new Exception("Cat.logError异常"));
             t1.complete();
             t.complete();
+
+            Cat.logError(new Exception("Cat.logError异常1111111"));
         }
      }
 }
