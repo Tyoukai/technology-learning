@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Tyoukai
@@ -33,20 +35,20 @@ public class HikariMysqlDemo {
         try {
             conn = ds.getConnection();
             statement = conn.createStatement();
-            rs = statement.executeQuery("select ds.id as dd, ds.name from om_data_sources ds");
-            rs.getMetaData().getColumnCount();
-            rs.getMetaData().getColumnLabel(1);
+            rs = statement.executeQuery("select * from om_data_sources ds");
             while (rs.next()) {
-                System.out.print(rs.getString("id") + ",");
-                System.out.println(rs.getString("name"));
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                    System.out.print(rs.getString(rs.getMetaData().getColumnLabel(i)) + ",");
+                }
                 System.out.println();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (conn != null) {
                 conn.close();
             }
+            ds.close();
         }
     }
 }
