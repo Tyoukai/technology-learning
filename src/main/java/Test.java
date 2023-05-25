@@ -13,7 +13,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * Created on 2021-05-15
  */
 public class Test {
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, InterruptedException {
 
 
 
@@ -34,6 +34,10 @@ public class Test {
 
         String s = "2023-02-22 18:45:50.0";
         System.out.println(s.substring(0, s.length() - 2));
+        while (true) {
+            System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+        }
+
 
 
         

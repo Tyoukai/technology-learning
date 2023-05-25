@@ -1,5 +1,7 @@
 package tDengine;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,13 +16,18 @@ public class TableInsertDemo {
         String jdbcUrl = "jdbc:TAOS-RS://172.16.66.18:6041?user=root&password=taosdata";
         Connection connection = DriverManager.getConnection(jdbcUrl);
 
-        for (int i = 0; i < 10; i++) {
-            String sql = "INSERT INTO operation_test.om_0_test USING operation_test.om_stable_metric TAGS(1, 1, 'name', 'originName') VALUES('2023-05-15 15:42:16', '" + i + "')";
+        int count = 1;
+        while (true) {
+            String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS");
+            String sql = "INSERT INTO operation_test.om_0_test USING operation_test.om_stable_metric TAGS(1, 1, 'name', 'originName') VALUES('" + date + "', '" + count + "')";
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(sql);
             stmt.close();
-            Thread.sleep(2000);
-            System.out.println("1111");
+            count++;
+            if (count > 10000) {
+                break;
+            }
+            Thread.sleep(1);
         }
 
         connection.close();
