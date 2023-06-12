@@ -25,25 +25,27 @@ public class CreateTdengineData {
         Statement stmt = conn.createStatement();
 
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long timestamp = 1678294675000L;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        long timestamp = 1685858446000L;
         long current = System.currentTimeMillis();
         for (; timestamp < current; ) {
             String timeStr = format.format(timestamp);
-            int rowCount = stmt.executeUpdate(createSql(timeStr, "cpu_usage2", "机器2CPU使用率", "10982", "2"));
+            int rowCount = stmt.executeUpdate(createSql(timeStr, "cpu_usage1", "机器1CPU使用率", "10981", "1"));
             System.out.println(rowCount);
-            timestamp += 60000;
+            timestamp += 60023;
         }
 
         stmt.close();
     }
 
     public static String createSql(String time, String name, String nameShow, String nameOrigin, String metricId) throws JsonProcessingException {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("nameShow", nameShow);
         map.put("nameOrigin", nameOrigin);
-        map.put("value", random.nextFloat() * 1000 + "");
+        Map<String, String> valueMap = new HashMap<>();
+        valueMap.put("zabbixMysql", random.nextFloat() * 1000 + "");
+        map.put("value", valueMap);
 
 
         // "INSERT INTO om_metrics.${tableName} USING pangu_om.om_metrics TAGS(${dataSourceId}, ${metricId}, ${name}, ${nameOrigin}) VALUES(${timestamp}, ${metricStr})";

@@ -34,9 +34,20 @@ public class Test {
 
         String s = "2023-02-22 18:45:50.0";
         System.out.println(s.substring(0, s.length() - 2));
-        while (true) {
-            System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-        }
+
+
+        String sss = "\r\n shddds \r\n sdsdsd sdsddsdiffc";
+
+        sss = sss.replaceAll(" ", "");
+
+        System.out.println(sss);
+        System.out.println("==================");
+
+        sss = sss.replaceAll("\r|\n", "");
+        System.out.println(sss);
+
+
+        System.out.println(DateUtils.parseDate("2023-05-31 14:19:29", "yyyy-MM-dd HH:mm:ss"));
 
 
 
