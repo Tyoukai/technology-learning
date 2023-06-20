@@ -17,28 +17,20 @@ public class PhaserDemo {
         for (int i = 0; i < 3; i++) {
             phaser.register();
             executorService.submit(() -> {
-                try {
-                    Thread.sleep((long) (Math.random() * 3000));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+
 
                 System.out.println("任务" + Thread.currentThread().getName() + "准备完毕，即将开始执行任务");
                 phaser.arriveAndAwaitAdvance();
 
-                System.out.println("任务" + Thread.currentThread().getName() + "开始执行");
-                try {
-                    Thread.sleep((long) (Math.random() * 2000));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                System.out.println("任务" + Thread.currentThread().getName() + "执行结束");
+                System.out.println("任务" + Thread.currentThread().getName() + "执行结束, left:" + phaser.getUnarrivedParties());
             });
         }
 
-        System.out.println("主任务完成============");
-        phaser.arriveAndAwaitAdvance();
+        System.out.println("主任务完成1============,current time:" + System.currentTimeMillis());
+        Thread.sleep(3000);
+        phaser.forceTermination();
+        System.out.println("主任务完成2============,current time:" + System.currentTimeMillis());
+//        phaser.arriveAndAwaitAdvance();
 
 
     }
