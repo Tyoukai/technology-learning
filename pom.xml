@@ -233,6 +233,13 @@
             <version>8.1.1.49</version>
         </dependency>
 
+        <!-- sql解析 -->
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>4.6</version>
+        </dependency>
+
 
 
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java8.Person;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 
 /**
  * @author zhangkwei <zhangkewei@kuaishou.com>
@@ -51,6 +52,7 @@ public class Test {
 
 
 
-        
+        List<Integer> list = Lists.newArrayList(1,2,3,4,5);
+        list = list.subList(0, 5);
     }
 }
