@@ -54,5 +54,9 @@ public class Test {
 
         List<Integer> list = Lists.newArrayList(1,2,3,4,5);
         list = list.subList(0, 5);
+
+        System.out.println("\"AMOUNT\" : \"17685.1719\"".toLowerCase());
+
+        System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy.MM.dd"));
     }
 }

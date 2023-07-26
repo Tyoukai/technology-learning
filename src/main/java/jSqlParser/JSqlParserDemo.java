@@ -4,10 +4,7 @@ package jSqlParser;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
 
@@ -18,10 +15,20 @@ import java.util.List;
 public class JSqlParserDemo {
 
     public static void main(String[] args) throws JSQLParserException {
-        String sql = "select fund_account_id, count(1) num from t_report group by fund_account_id";
+        String sql = "SELECT * FROM history_uint WHERE itemid='104913'";
         Select select = (Select) CCJSqlParserUtil.parse(sql);
         SelectBody selectBody = select.getSelectBody();
         List<SelectItem> items = ((PlainSelect) selectBody).getSelectItems();
-        System.out.println(selectBody);
+        for (SelectItem item : items) {
+            System.out.println(item.toString());
+        }
+        SelectItem item = items.get(0);
+        item.accept(new SelectItemVisitorAdapter() {
+            @Override
+            public void visit(SelectExpressionItem item1) {
+                System.out.println("item alias:" + item1.getAlias().getName());
+            }
+        });
+//        System.out.println(selectBody);
     }
 }
