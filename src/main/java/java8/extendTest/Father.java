@@ -12,8 +12,17 @@ public class Father {
     private static final Map<String, String> fatherMap = new HashMap<>();
     protected String message;
     protected final Map<String, String> map = new HashMap<>();
+    private String like;
 
     public Map<String, String> getFatherMap() {
         return fatherMap;
+    }
+
+    public String getLike() {
+        return like;
+    }
+
+    public void setLike(String like) {
+        this.like = like;
     }
 }

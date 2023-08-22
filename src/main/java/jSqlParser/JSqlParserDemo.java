@@ -15,7 +15,7 @@ import java.util.List;
 public class JSqlParserDemo {
 
     public static void main(String[] args) throws JSQLParserException {
-        String sql = "SELECT * FROM history_uint WHERE itemid='104913'";
+        String sql = "SELECT itemid, clock, value, ns FROM history_uint WHERE itemid='104913' and clock > $time";
         Select select = (Select) CCJSqlParserUtil.parse(sql);
         SelectBody selectBody = select.getSelectBody();
         List<SelectItem> items = ((PlainSelect) selectBody).getSelectItems();
@@ -23,12 +23,12 @@ public class JSqlParserDemo {
             System.out.println(item.toString());
         }
         SelectItem item = items.get(0);
-        item.accept(new SelectItemVisitorAdapter() {
-            @Override
-            public void visit(SelectExpressionItem item1) {
-                System.out.println("item alias:" + item1.getAlias().getName());
-            }
-        });
+//        item.accept(new SelectItemVisitorAdapter() {
+//            @Override
+//            public void visit(SelectExpressionItem item1) {
+//                System.out.println("item alias:" + item1.getAlias().getName());
+//            }
+//        });
 //        System.out.println(selectBody);
     }
 }
