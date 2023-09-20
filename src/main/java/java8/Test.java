@@ -19,5 +19,8 @@ public class Test {
         map.values().removeIf(item -> "3".equals(item));
 
         System.out.println(map);
+        int a = 1_048_576;
+        System.out.println(a);
+
     }
 }
