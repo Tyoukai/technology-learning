@@ -20,8 +20,7 @@ public class MsgConsumer {
 
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        // 172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.66.14:9092,172.16.66.17:9092,172.16.66.18:9092"); //192.168.3.36:9092,192.168.3.36:9093,192.168.3.36:9094
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.19.185.25:9092,172.19.185.26:9092,172.19.185.27:9092");
         // 消费分组名
         props.put(ConsumerConfig.GROUP_ID_CONFIG, CONSUMER_GROUP_NAME);
 
@@ -97,7 +96,7 @@ public class MsgConsumer {
             }
         }*/
 
-
+        int count = 0;
         while (true) {
             /*
              * poll() API 是拉取消息的长轮询
@@ -124,6 +123,12 @@ public class MsgConsumer {
                     }
                 });*/
             }
+
+            if (count > 10) {
+                consumer.subscribe(Arrays.asList("kafkaTestTopic"));
+                Thread.sleep(1000);
+            }
+            count++;
         }
     }
 }
