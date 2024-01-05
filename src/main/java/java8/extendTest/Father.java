@@ -7,7 +7,7 @@ import java.util.Map;
  * @Author: Tyoukai
  * @Date: 2023/5/12 13:45
  */
-public class Father {
+public abstract class Father {
 
     private static final Map<String, String> fatherMap = new HashMap<>();
     protected String message;

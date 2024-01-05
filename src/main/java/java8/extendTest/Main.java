@@ -18,5 +18,6 @@ public class Main {
         son2.setLike("son2");
         System.out.println(son1.message == son2.message);
         System.out.println(son1.map == son2.map);
+        System.out.println(son1.getFatherMap() == son2.getFatherMap());
     }
 }
