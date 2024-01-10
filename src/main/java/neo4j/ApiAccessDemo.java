@@ -25,26 +25,31 @@ public class ApiAccessDemo {
 //        });
 
         // 获取节点
-//        StatementResult result = session.run("match (a:Person{name: $name}) return a", parameters("name", "zkw"));
+//        StatementResult result = session.run("match (a:Person{name: $name}) return a", parameters("name", "zkw1"));
 //        while (result.hasNext()) {
 //            Record record = result.next();
 //            System.out.println(record.get(0).get("name").asString());
 //            System.out.println(record.get(0).get("age").asString());
 //        }
-        session.readTransaction(transaction -> {
+        String name = session.readTransaction(transaction -> {
             StatementResult result = transaction.run("MATCH (a:Person {name: $name}) RETURN a", parameters("name", "zkw"));
-            System.out.println(result.next().get(0).get("name").asString());
-            return null;
+//            System.out.println(result.next().get(0).get("name").asString());
+            return result.next().get(0).get("name").asString();
         });
+        System.out.println(name);
 
 
         // 更新节点
         // 删除节点 MATCH (a:Location {city:'Portland'}) DELETE a
         // 删除属性 MATCH (a:Person {name:'Mike'}) SET a.test='test'
-        //         MATCH (a:Person {name:'Mike'}) REMOVE a.test
+        //         MATCH (a:Person {name:'Mike'}) DELETE a
         // 删除有关系的节点 MATCH (a:Person {name:'Todd'})-[rel]-(b:Person) DELETE a,b,rel
 //        session.writeTransaction(transaction -> {
 //            transaction.run("MATCH (n:Person{name: $name}) SET n.age=$age", parameters("name", "zkw", "age", "12"));
+//            return null;
+//        });
+//        session.writeTransaction(transaction -> {
+//            transaction.run(" MATCH (a:Person {name:'zkw'}) DELETE a");
 //            return null;
 //        });
 
