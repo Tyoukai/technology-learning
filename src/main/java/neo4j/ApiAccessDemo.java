@@ -20,9 +20,14 @@ public class ApiAccessDemo {
 
         // 创建节点
 //        session.writeTransaction(transaction -> {
-//            transaction.run("CREATE (a:Person{name: $name})", parameters("name", "zkw"));
+//            transaction.run("CREATE (a:Person {name: $name, age:$age})", parameters("age", "12","name", "zkw1"));
 //            return null;
 //        });
+
+        session.writeTransaction(transaction -> {
+            transaction.run("match (a:Person{name:$name}), (b:Person{name:'zkw1'}) merge (a) -[:#relation] -> (b)", parameters("name", "zkw", "relation", "relation"));
+            return null;
+        });
 
         // 获取节点
 //        StatementResult result = session.run("match (a:Person{name: $name}) return a", parameters("name", "zkw1"));
@@ -31,12 +36,16 @@ public class ApiAccessDemo {
 //            System.out.println(record.get(0).get("name").asString());
 //            System.out.println(record.get(0).get("age").asString());
 //        }
-        String name = session.readTransaction(transaction -> {
-            StatementResult result = transaction.run("MATCH (a:Person {name: $name}) RETURN a", parameters("name", "zkw"));
-//            System.out.println(result.next().get(0).get("name").asString());
-            return result.next().get(0).get("name").asString();
-        });
-        System.out.println(name);
+        // MATCH (n:Person{name:'Steve'}) -[:BORN_IN] -> (b:Location{city:'Lynn'}) return n, b
+        // MATCH (a:Person {name: $name}) RETURN a
+
+//        String name = session.readTransaction(transaction -> {
+//            StatementResult result = transaction.run("match (n:Person{name:'zkw'}) -[r] - (b) return n,r,b");
+////            System.out.println(result.next().get(0).get("name").asString());
+//            Record record = result.next();
+//            return record.get(0).get("name").asString();
+//        });
+//        System.out.println(name);
 
 
         // 更新节点

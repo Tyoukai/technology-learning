@@ -34,24 +34,32 @@ public class HikariMysqlDemo {
 //        Statement statement = null;
 //        ResultSet rs = null;
         try {
-            while (true) {
-                Connection conn = ds.getConnection();
-                Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("select count(*) from om_data_sources ds");
-                while (rs.next()) {
-                    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                        System.out.print(rs.getString(rs.getMetaData().getColumnLabel(i)) + ",");
-                    }
-                    System.out.println();
-                }
-                statement.close();
-                conn.close();
-                Thread.sleep(1000L);
+//            while (true) {
+//                Connection conn = ds.getConnection();
+//                Statement statement = conn.createStatement();
+//                ResultSet rs = statement.executeQuery("select count(*) from om_data_sources ds");
+//                while (rs.next()) {
+//                    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+//                        System.out.print(rs.getString(rs.getMetaData().getColumnLabel(i)) + ",");
+//                    }
+//                    System.out.println();
+//                }
+//                statement.close();
+//                conn.close();
+//                Thread.sleep(1000L);
+//            }
+            Connection conn = ds.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("select * from om_metrics where data_source_id = -1");
+            int columnCount = rs.getMetaData().getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.println(rs.getMetaData().getColumnLabel(i));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
+//        catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }
