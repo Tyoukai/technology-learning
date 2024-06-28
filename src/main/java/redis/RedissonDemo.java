@@ -2,40 +2,41 @@ package redis;
 
 import com.google.common.collect.Lists;
 import org.redisson.Redisson;
-import org.redisson.api.RBucket;
-import org.redisson.api.RMap;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class RedissonDemo {
     public static void main(String[] args) {
         Config config = new Config();
-//        config.useReplicatedServers()
-//                .addNodeAddress("redis://172.16.123.188:6379");
-//                .setPassword("1234_rewq");
 
-//        config.useSentinelServers()
-//                .setMasterName("mymaster")
-//                .setPassword("1234rewq")
-//                .setSentinelAddresses(Lists.newArrayList("redis://172.16.66.14:26379", "redis://172.16.66.17:26379", "redis://172.16.66.18:26379"));
-//        .setSentinelAddresses(Lists.newArrayList("redis://172.19.184.206:26379", "redis://172.19.184.207:26379"));
+//        config.useMasterSlaveServers()
+//                .setMasterAddress("redis://172.19.185.25:6379")
+//                .setPassword("admin123")
+//                .addSlaveAddress("redis://172.19.185.26:6379", "redis://172.19.185.27:6379");
+//        RedissonClient client = Redisson.create(config);
 
-//        config = Config.fromYAML(new File("config-file.yaml"));
         config.useMasterSlaveServers()
-                .setMasterAddress("redis://172.16.66.17:6379")
-                .setPassword("1234rewq")
-                .addSlaveAddress("redis://172.16.66.14:6379", "redis://172.16.66.18:6379");
+                .setMasterAddress("redis://172.19.65.23:6379")
+                .setPassword("admin123")
+                .addSlaveAddress("redis://172.19.65.24:6379", "redis://172.19.65.25:6379");
         RedissonClient client = Redisson.create(config);
 
 //        string(client);
-        hash((client));
+//        hash((client));
 //        hashHincrBy(client);
+//        zSet(client);
+
+//        client.getKeys().delete("hashTest");
+        del(client);
+
+        client.shutdown();
 
 
 
@@ -69,10 +70,27 @@ public class RedissonDemo {
 //
 //        // 查看key是否存在
 //        System.out.println(client.getMap("isExists", new StringCodec("utf-8")).isExists());
+    }
 
+    public static void zSet(RedissonClient client) {
+        RScoredSortedSet<String> rScoredSortedSet = client.getScoredSortedSet("zsetTest");
+        rScoredSortedSet.addScore("element1", 10);
+        rScoredSortedSet.addScore("element2", 20);
 
+    }
 
-
+    public static void del(RedissonClient client) {
+//        List<String> delKeys = new ArrayList<>();
+//        client.getKeys().getKeys().forEach(key -> {
+//            if (key.startsWith("minute_flow_segment")) {
+//                delKeys.add(key);
+//            }
+//        });
+//
+//        for (String key : delKeys) {
+//            client.getKeys();
+//        }
+        client.getKeys().deleteByPattern("system_relation_flow_statistics_2024-06-01*");
     }
 
     public static void hashHincrBy(RedissonClient client) {
