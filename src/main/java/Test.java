@@ -21,15 +21,15 @@ import spring.extend.Father;
  */
 public class Test {
     public static void main(String[] args) {
-        System.out.println(Math.abs(HashUtil.bkdrHash("172.16.19.173_172.16.65.137")) % 1000);
-        System.out.println(StringUtils.equals(null, ""));
-        Person person = new Person();
-        person.setAge(12);
-        Object personObj = ObjectMapperUtil.toJson(person);
-        Person a = ObjectMapperUtil.fromJson(personObj, Person.class);
+        String a = "{\"name\":\"1\",\"nameOrigin\":\"1\",\"nameShow\":\"1\",\"value\":{\"1\":\"0\",\"2\":\"0\",\"3\":\"0.0\",\"4\":\"0.0\",\"5\":\"0.0\",\"6\":\"0.0\",\"7\":\"0.0\",\"8\":\"0.0\",\"9\":\"0.0\",\"10\":\"0.0\"}}";
+        Set<String> set = new HashSet<>();
+        set.add("172.16.66.14:8080");
+        System.out.println(set.contains("172.16.66.14"));
 
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
-        System.out.println(set.contains(null));
+
+        double currentFlowCountEma = 10251.672137122889;
+        long addd = 121L;
+        System.out.println(Double.parseDouble(String.format("%.1f", currentFlowCountEma)));
+        System.out.println((double) addd);
     }
 }
