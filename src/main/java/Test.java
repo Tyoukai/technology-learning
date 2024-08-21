@@ -27,9 +27,11 @@ public class Test {
         System.out.println(set.contains("172.16.66.14"));
 
 
-        double currentFlowCountEma = 10251.672137122889;
-        long addd = 121L;
-        System.out.println(Double.parseDouble(String.format("%.1f", currentFlowCountEma)));
-        System.out.println((double) addd);
+        System.out.println("10.234.22.44".startsWith("10."));
+
+
+        String aaa = "eeeddd'sds'ddd'dd";
+        aaa = aaa.replaceAll("'", "`");
+        System.out.println(aaa);
     }
 }
