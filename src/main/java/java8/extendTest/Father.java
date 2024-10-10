@@ -25,4 +25,12 @@ public abstract class Father {
     public void setLike(String like) {
         this.like = like;
     }
+
+    Father() {
+        init();
+    }
+
+    public static void init() {
+        System.out.println("father init");
+    }
 }
