@@ -19,5 +19,11 @@ public class Main {
         System.out.println(son1.message == son2.message);
         System.out.println(son1.map == son2.map);
         System.out.println(son1.getFatherMap() == son2.getFatherMap());
+
+        try {
+            Thread.sleep(10000000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
