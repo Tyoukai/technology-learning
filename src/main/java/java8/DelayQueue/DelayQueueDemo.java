@@ -2,6 +2,7 @@ package java8.DelayQueue;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.concurrent.DelayQueue;
 
 /**
@@ -22,6 +23,23 @@ public class DelayQueueDemo {
         long currentTime = System.currentTimeMillis();
         System.out.println("订单延迟队列开始时间:" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         order1.addExecuteTime(1000);
+
+        // 从delayQueue中删除Order2
+
+//        Iterator<Order> iterable = delayQueue.iterator();
+//        while (iterable.hasNext()) {
+//            Order order = iterable.next();
+//            if (order.getName().equals("Order2")) {
+//                iterable.remove();
+//                break;
+//            }
+//        }
+
+//        delayQueue.removeIf(order -> order.getName().equals("Order2"));
+        delayQueue.remove(order2);
+
+
+
         while (delayQueue.size() != 0) {
             /**
              * 取队列头部元素是否过期
